@@ -27,6 +27,7 @@ class ProductFactsProvider:
         self,
         barcode: str,
         *,
+        preferred_category: Literal["food", "cosmetic"] | None = None,
         debug: dict[str, object] | None = None,
     ) -> ProductFacts | None:
         cache_key = f"barcode::{barcode}"
@@ -37,28 +38,36 @@ class ProductFactsProvider:
             return ProductFacts(**cached)
 
         headers = {"User-Agent": self._settings.off_user_agent}
+        source_order = self._source_order(preferred_category)
 
-        off_data = await self._fetch_off_json(OFF_BARCODE_URL.format(barcode=barcode), headers=headers)
-        if off_data and off_data.get("status") == 1:
-            parsed = self._parse_off(off_data.get("product", {}))
-            if parsed and parsed.ingredients:
-                self._set_status(debug, "off_status", "ok")
-                self._cache.set(cache_key, parsed.model_dump())
-                return parsed
-            self._set_status(debug, "off_status", "no_match")
-        else:
-            self._set_status(debug, "off_status", "error" if off_data is None else "no_match")
+        if preferred_category == "food":
+            self._set_status(debug, "obf_status", "skipped_category")
+        elif preferred_category == "cosmetic":
+            self._set_status(debug, "off_status", "skipped_category")
 
-        obf_data = await self._fetch_off_json(OBF_BARCODE_URL.format(barcode=barcode), headers=headers)
-        if obf_data and obf_data.get("status") == 1:
-            parsed = self._parse_obf(obf_data.get("product", {}))
-            if parsed and parsed.ingredients:
-                self._set_status(debug, "obf_status", "ok")
-                self._cache.set(cache_key, parsed.model_dump())
-                return parsed
-            self._set_status(debug, "obf_status", "no_match")
-        else:
-            self._set_status(debug, "obf_status", "error" if obf_data is None else "no_match")
+        for source in source_order:
+            if source == "off":
+                off_data = await self._fetch_off_json(OFF_BARCODE_URL.format(barcode=barcode), headers=headers)
+                if off_data and off_data.get("status") == 1:
+                    parsed = self._parse_off(off_data.get("product", {}))
+                    if parsed and parsed.ingredients:
+                        self._set_status(debug, "off_status", "ok")
+                        self._cache.set(cache_key, parsed.model_dump())
+                        return parsed
+                    self._set_status(debug, "off_status", "no_match")
+                else:
+                    self._set_status(debug, "off_status", "error" if off_data is None else "no_match")
+            else:
+                obf_data = await self._fetch_off_json(OBF_BARCODE_URL.format(barcode=barcode), headers=headers)
+                if obf_data and obf_data.get("status") == 1:
+                    parsed = self._parse_obf(obf_data.get("product", {}))
+                    if parsed and parsed.ingredients:
+                        self._set_status(debug, "obf_status", "ok")
+                        self._cache.set(cache_key, parsed.model_dump())
+                        return parsed
+                    self._set_status(debug, "obf_status", "no_match")
+                else:
+                    self._set_status(debug, "obf_status", "error" if obf_data is None else "no_match")
 
         return None
 
@@ -84,13 +93,12 @@ class ProductFactsProvider:
                 return ProductFacts(**cached)
 
         headers = {"User-Agent": self._settings.off_user_agent}
-        source_order: list[str]
+        source_order = self._source_order(preferred_category)
+
         if preferred_category == "food":
-            source_order = ["off"]
+            self._set_status(debug, "obf_status", "skipped_category")
         elif preferred_category == "cosmetic":
-            source_order = ["obf"]
-        else:
-            source_order = ["off", "obf"]
+            self._set_status(debug, "off_status", "skipped_category")
 
         for candidate in candidates:
             for source in source_order:
@@ -137,6 +145,14 @@ class ProductFactsProvider:
             return
         debug[key] = status
 
+    @staticmethod
+    def _source_order(preferred_category: Literal["food", "cosmetic"] | None) -> list[str]:
+        if preferred_category == "food":
+            return ["off"]
+        if preferred_category == "cosmetic":
+            return ["obf"]
+        return ["off", "obf"]
+
     async def _fetch_off_json(
         self,
         url: str,
@@ -165,6 +181,9 @@ class ProductFactsProvider:
         cleaned = ProductFactsProvider._strip_marketplace_noise(base_without_suffix or base)
 
         cleanup_patterns = [
+            r"\ball\s*[-–—]?\s*weather\b",
+            r"\bmaska\s+na\s+vlasy\b",
+            r"\bmaska\s+no\s+vlasy\b",
             r"[\(\[\{].*?[\)\]\}]",
             r"\b\d+\s?[xX]\s?\d+(?:[\.,]\d+)?\s?(?:ml|l|cl|dl|lt|ltr|liter|liters|litre|litres|g|gr|grs|gram|grams|gramme|grammes|kg|kgs|mg|mcg|oz|lb|lbs|fl\.?oz)\b",
             r"\b\d+(?:[\.,]\d+)?\s?(?:ml|l|cl|dl|lt|ltr|liter|liters|litre|litres|g|gr|grs|gram|grams|gramme|grammes|kg|kgs|mg|mcg|oz|lb|lbs|fl\.?oz)\b",

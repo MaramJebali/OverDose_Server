@@ -1,0 +1,683 @@
+{
+  "status": 201,
+  "data": {
+    "scan_id": 37,
+    "ingredients": [
+      "Flocons d'avoine complète",
+      "Flocons de blé complet",
+      "Raisins",
+      "Figues séchées",
+      "Flocons d'épeautre complet",
+      "Pétales de maïs",
+      "Dattes",
+      "Abricots secs",
+      "Graines de tournesol",
+      "Graines de lin",
+      "Graines de courge",
+      "raisins",
+      "huile de tournesol",
+      "figues",
+      "farine de riz",
+      "dattes",
+      "abricots"
+    ],
+    "risks": [
+      {
+        "ingredient": "Flocons d'avoine complète",
+        "level": "low"
+      },
+      {
+        "ingredient": "Flocons de blé complet",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Raisins",
+        "level": "high"
+      },
+      {
+        "ingredient": "Figues séchées",
+        "level": "low"
+      },
+      {
+        "ingredient": "Flocons d'épeautre complet",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Pétales de maïs",
+        "level": "high"
+      },
+      {
+        "ingredient": "Dattes",
+        "level": "low"
+      },
+      {
+        "ingredient": "Abricots secs",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Graines de tournesol",
+        "level": "high"
+      },
+      {
+        "ingredient": "Graines de lin",
+        "level": "low"
+      },
+      {
+        "ingredient": "Graines de courge",
+        "level": "medium"
+      },
+      {
+        "ingredient": "raisins",
+        "level": "high"
+      },
+      {
+        "ingredient": "huile de tournesol",
+        "level": "low"
+      },
+      {
+        "ingredient": "figues",
+        "level": "medium"
+      },
+      {
+        "ingredient": "farine de riz",
+        "level": "high"
+      },
+      {
+        "ingredient": "dattes",
+        "level": "low"
+      },
+      {
+        "ingredient": "abricots",
+        "level": "medium"
+      }
+    ],
+    "recommendations": [
+      {
+        "product": "Alternative for Flocons d'avoine complète",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Flocons de blé complet",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Raisins",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Figues séchées",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Flocons d'épeautre complet",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Pétales de maïs",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Dattes",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Abricots secs",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Graines de tournesol",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Graines de lin",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Graines de courge",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for raisins",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for huile de tournesol",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for figues",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for farine de riz",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for dattes",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for abricots",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      }
+    ],
+    "analysis": {
+      "source": "lens",
+      "confidence": 0.89,
+      "category": "food",
+      "name": "Muesli Raisin, Figue, Abricot",
+      "brand": "Bjorg",
+      "barcode": null,
+      "lens_title": "BJORG Muesli Bio Sans Sucres Ajoutés 375g – Fruits & Céréales",
+      "debug": {
+        "serpapi_status": "ok",
+        "off_status": "cache_hit",
+        "obf_status": "cache_hit",
+        "grok_status": "ok",
+        "barcode_status": "not_detected",
+        "barcode_source": "none",
+        "lens_status": "ready",
+        "serpapi_match_count": 5,
+        "lens_candidates": [
+          "BJORG Muesli Bio Sans Sucres Ajoutés 375g – Fruits & Céréales",
+          "Bjorg Protein Muesli 375 G | Desertcart Tunisia",
+          "Promotion Bjorg Muesli Raisin Figue Abricot sans sucres ajoutés bio",
+          "YẾN MẠCH BJORP - Hằng Ngố Store",
+          "Buy Bjorg Muesli Fruits 375g (Organic) Online | Carrefour KSA"
+        ],
+        "lens_public_image_url": "https://res.cloudinary.com/dlmeo2dci/image/upload/v1777816372/czudcdapiqlgqmo8teyd.jpg",
+        "grok_title_extraction": "parsed",
+        "grok_brand": "Bjorg",
+        "grok_company": null,
+        "grok_product_name": "Muesli Bio Sans Sucres Ajoutés Fruits & Céréales",
+        "grok_category": "food",
+        "grok_confidence": 0.9,
+        "grok_inferred_category": "food",
+        "facts_query_attempts": [
+          "Muesli Bio Sans Sucres Ajoutés Fruits & Céréales Bjorg"
+        ],
+        "facts_query_success": "Muesli Bio Sans Sucres Ajoutés Fruits & Céréales Bjorg",
+        "grok_lookup_query": "Muesli Bio Sans Sucres Ajoutés Fruits & Céréales Bjorg"
+      }
+    }
+  }
+}
+{
+  "status": 201,
+  "data": {
+    "scan_id": 38,
+    "ingredients": [
+      "Ingredientes",
+      "Propylene Glycol",
+      "Aloe barbadensis leaf extract",
+      "Tocopheryl acetate",
+      "Lauryl Glucoside",
+      "Polyaminopropyl biguanide",
+      "Citric acid",
+      "2-Bromo-2-Nitropropane-1.3-Diol",
+      "Didecyldimonium Chloride",
+      "Fragrance",
+      "distribuido para El Salvador",
+      "Aqua"
+    ],
+    "risks": [
+      {
+        "ingredient": "Ingredientes",
+        "level": "low"
+      },
+      {
+        "ingredient": "Propylene Glycol",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Aloe barbadensis leaf extract",
+        "level": "high"
+      },
+      {
+        "ingredient": "Tocopheryl acetate",
+        "level": "low"
+      },
+      {
+        "ingredient": "Lauryl Glucoside",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Polyaminopropyl biguanide",
+        "level": "high"
+      },
+      {
+        "ingredient": "Citric acid",
+        "level": "low"
+      },
+      {
+        "ingredient": "2-Bromo-2-Nitropropane-1.3-Diol",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Didecyldimonium Chloride",
+        "level": "high"
+      },
+      {
+        "ingredient": "Fragrance",
+        "level": "low"
+      },
+      {
+        "ingredient": "distribuido para El Salvador",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Aqua",
+        "level": "high"
+      }
+    ],
+    "recommendations": [
+      {
+        "product": "Alternative for Ingredientes",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Propylene Glycol",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Aloe barbadensis leaf extract",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Tocopheryl acetate",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Lauryl Glucoside",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Polyaminopropyl biguanide",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Citric acid",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for 2-Bromo-2-Nitropropane-1.3-Diol",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Didecyldimonium Chloride",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Fragrance",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for distribuido para El Salvador",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Aqua",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      }
+
+  "status": 201,
+  "data": {
+    "scan_id": 39,
+    "ingredients": [
+      "Aqua",
+      "Sodium Laureth Sulfate",
+      "Coca midopropyl Betaine",
+      "PEG-120 Methyl Glucose Dioleate",
+      "Cocamide MEA",
+      "Argania Spinosa Kernel Oil",
+      "Carthamus Tinctorius Seed Oil",
+      "Macadamia Ternifolia Seed Oil",
+      "Olea Europaea Fruit Oil",
+      "Prunus Armeniaca Kernel Oil",
+      "Prunus Amygdalus Dulcis Oil",
+      "Rosa Canina Fruit Oil",
+      "Sesamum Indicum Seed Oil",
+      "Panthenol",
+      "Cocodimonium Hydroxypropyl Hydrolyzed Keratin",
+      "Hydrolyzed Keratin",
+      "Disodium Cocoamphodiacetate",
+      "PEG-7 Glyceryl Cocoate",
+      "PEG-40 Hydrogenated Castor Oil",
+      "Sodium Benzoate",
+      "Citric Acid",
+      "Sodium Chloride",
+      "Polyquaternium-10",
+      "Parfum",
+      "Butylphenyl Methylpropional",
+      "Linalool",
+      "Propylene Glycol",
+      "C19140",
+      "CI 15985",
+      "CI 47005"
+    ],
+    "risks": [
+      {
+        "ingredient": "Aqua",
+        "level": "low"
+      },
+      {
+        "ingredient": "Sodium Laureth Sulfate",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Coca midopropyl Betaine",
+        "level": "high"
+      },
+      {
+        "ingredient": "PEG-120 Methyl Glucose Dioleate",
+        "level": "low"
+      },
+      {
+        "ingredient": "Cocamide MEA",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Argania Spinosa Kernel Oil",
+        "level": "high"
+      },
+      {
+        "ingredient": "Carthamus Tinctorius Seed Oil",
+        "level": "low"
+      },
+      {
+        "ingredient": "Macadamia Ternifolia Seed Oil",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Olea Europaea Fruit Oil",
+        "level": "high"
+      },
+      {
+        "ingredient": "Prunus Armeniaca Kernel Oil",
+        "level": "low"
+      },
+      {
+        "ingredient": "Prunus Amygdalus Dulcis Oil",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Rosa Canina Fruit Oil",
+        "level": "high"
+      },
+      {
+        "ingredient": "Sesamum Indicum Seed Oil",
+        "level": "low"
+      },
+      {
+        "ingredient": "Panthenol",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Cocodimonium Hydroxypropyl Hydrolyzed Keratin",
+        "level": "high"
+      },
+      {
+        "ingredient": "Hydrolyzed Keratin",
+        "level": "low"
+      },
+      {
+        "ingredient": "Disodium Cocoamphodiacetate",
+        "level": "medium"
+      },
+      {
+        "ingredient": "PEG-7 Glyceryl Cocoate",
+        "level": "high"
+      },
+      {
+        "ingredient": "PEG-40 Hydrogenated Castor Oil",
+        "level": "low"
+      },
+      {
+        "ingredient": "Sodium Benzoate",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Citric Acid",
+        "level": "high"
+      },
+      {
+        "ingredient": "Sodium Chloride",
+        "level": "low"
+      },
+      {
+        "ingredient": "Polyquaternium-10",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Parfum",
+        "level": "high"
+      },
+      {
+        "ingredient": "Butylphenyl Methylpropional",
+        "level": "low"
+      },
+      {
+        "ingredient": "Linalool",
+        "level": "medium"
+      },
+      {
+        "ingredient": "Propylene Glycol",
+        "level": "high"
+      },
+      {
+        "ingredient": "C19140",
+        "level": "low"
+      },
+      {
+        "ingredient": "CI 15985",
+        "level": "medium"
+      },
+      {
+        "ingredient": "CI 47005",
+        "level": "high"
+      }
+    ],
+    "recommendations": [
+      {
+        "product": "Alternative for Aqua",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Sodium Laureth Sulfate",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Coca midopropyl Betaine",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for PEG-120 Methyl Glucose Dioleate",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Cocamide MEA",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Argania Spinosa Kernel Oil",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Carthamus Tinctorius Seed Oil",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Macadamia Ternifolia Seed Oil",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Olea Europaea Fruit Oil",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Prunus Armeniaca Kernel Oil",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Prunus Amygdalus Dulcis Oil",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Rosa Canina Fruit Oil",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Sesamum Indicum Seed Oil",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Panthenol",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Cocodimonium Hydroxypropyl Hydrolyzed Keratin",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Hydrolyzed Keratin",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Disodium Cocoamphodiacetate",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for PEG-7 Glyceryl Cocoate",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for PEG-40 Hydrogenated Castor Oil",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Sodium Benzoate",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Citric Acid",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Sodium Chloride",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Polyquaternium-10",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Parfum",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for Butylphenyl Methylpropional",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for Linalool",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for Propylene Glycol",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      },
+      {
+        "product": "Alternative for C19140",
+        "reason": "Mock recommendation generated for low risk ingredient."
+      },
+      {
+        "product": "Alternative for CI 15985",
+        "reason": "Mock recommendation generated for medium risk ingredient."
+      },
+      {
+        "product": "Alternative for CI 47005",
+        "reason": "Mock recommendation generated for high risk ingredient."
+      }
+    ],
+{
+  "status": 200,
+  "data": {
+    "session_id": "23515075-6278-46ca-8f15-7c4a6e74751c",
+    "analyzed_count": 1,
+    "results": [
+      {
+        "product_id": "1",
+        "source": "lens",
+        "confidence": 0.89,
+        "category": "cosmetic",
+        "name": "daily moisturizing cream",
+        "brand": "cerave",
+        "ingredients": [
+          "AQUA",
+          "WATER",
+          "EAU",
+          "GLYCERIN",
+          "CAPRYLIC",
+          "CAPRIC TRIGLYCERIDE",
+          "CETEARYL ALCOHOL",
+          "CETYL ALCOHOL",
+          "POTASSIUM PHOSPHATE",
+          "CERAMIDE NP",
+          "CERAMIDE AP",
+          "CERAMIDE EOP",
+          "CARBOMER",
+          "DIMETHICONE",
+          "CETEARETH-20",
+          "BEHENTRIMONIUM METHOSULFATE",
+          "METHYLPARABEN",
+          "SODIUM LAUROYL LACTYLATE",
+          "CHOLESTEROL",
+          "DISODIUM EDTA",
+          "DIPOTASSIUM PHOSPHATE",
+          "PROPYLPARABEN",
+          "HYDROLYZED HYALURONIC ACID",
+          "PHYTOSPHINGOSINE",
+          "XANTHAN GUM",
+          "POLYSORBATE 20",
+          "POLYGLYCERYL-3 DIISOSTEARATE",
+          "7743",
+          "CODE F.I.L",
+          "D215763",
+          "2"
+        ],
+        "additives": [],
+        "barcode": null,
+        "lens_title": "American version of CeraVe all-weather moisturizing Tunisia | Ubuy",
+        "debug": {
+          "serpapi_status": "ok",
+          "off_status": "skipped_category",
+          "obf_status": "ok",
+          "grok_status": "ok",
+          "barcode_status": "not_detected",
+          "barcode_source": "none",
+          "lens_status": "ready",
+          "serpapi_match_count": 4,
+          "lens_candidates": [
+            "American version of CeraVe all-weather moisturizing Tunisia | Ubuy",
+            "CeraVe Daily Skincare for Oily Skin | Foaming Face Tunisia | Ubuy",
+            "ش م ر سيرافي ش م ل ش م ل ش م ل ش Tunisia | Ubuy",
+            "شراء لوشن مرطب CERAVE ، مرطب للوجه للبشرة العادية إلى الجافة مع حمض الهيالورونيك والسيراميد ، 8 أونصة ، 236 مل في دبي عبر الإنترنت | أفضل الأسعار في الإمارات العربية المتحدة | WEE (00041352)"
+          ],
+          "lens_public_image_url": "https://res.cloudinary.com/dlmeo2dci/image/upload/v1777816754/fnlzyfh8wdgyoydtxqbt.jpg",
+          "grok_title_extraction": "parsed",
+          "grok_brand": "CeraVe",
+          "grok_company": null,
+          "grok_product_name": "moisturizing",
+          "grok_category": "cosmetic",
+          "grok_confidence": 0.9,
+          "grok_inferred_category": "cosmetic",
+          "facts_query_attempts": [
+            "moisturizing CeraVe"
+          ],
+          "facts_query_success": "moisturizing CeraVe",
+          "grok_lookup_query": "moisturizing CeraVe"
+        }
+      }
+    ]
+  }
+}

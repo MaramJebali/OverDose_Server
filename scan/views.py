@@ -81,9 +81,19 @@ class ScanPipelineAPIView(APIView):
                     "lens_title": analysis.lens_title,
                     "debug": analysis.debug,
                 }
-            except Exception:
+            except Exception as exc:
                 logger.exception("Real scan pipeline failed for scan_id=%s", scan.id)
                 ingredients = []
+                analysis_payload = {
+                    "source": "failed",
+                    "confidence": 0.0,
+                    "category": "unknown",
+                    "name": "unknown",
+                    "brand": None,
+                    "barcode": None,
+                    "lens_title": None,
+                    "debug": {"error": str(exc)},
+                }
 
         # Use real agent for risk analysis
         risk_items, full_agent_report = analyze_ingredients_risks(ingredients)

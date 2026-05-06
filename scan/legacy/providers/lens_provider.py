@@ -54,9 +54,45 @@ class LensProvider:
             if title:
                 titles.append(title)
 
+        titles = self._prioritize_titles(titles)
+
         self._cache.set(cache_key, {"titles": titles})
         if debug is not None:
             debug["serpapi_status"] = "ok" if titles else "no_match"
             debug["serpapi_match_count"] = len(titles)
         logger.info("[LENS] Provider returned matches=%s", len(titles))
         return titles
+
+    @staticmethod
+    def _prioritize_titles(titles: list[str]) -> list[str]:
+        if not titles:
+            return titles
+
+        preferred = ("otrity", "izy by zedna", "amazon.ae")
+        deprioritized = ("amazon.com",)
+        ranked: list[tuple[int, int, str]] = []
+        for index, title in enumerate(titles):
+            lowered = title.casefold()
+            is_preferred = any(keyword in lowered for keyword in preferred)
+            is_deprioritized = any(keyword in lowered for keyword in deprioritized)
+            has_arabic = LensProvider._has_arabic_char(title)
+            if has_arabic:
+                rank = 2
+            elif is_preferred:
+                rank = 0
+            elif is_deprioritized:
+                rank = 2
+            else:
+                rank = 1
+            ranked.append((rank, index, title))
+
+        ranked.sort(key=lambda item: (item[0], item[1]))
+        return [item[2] for item in ranked]
+
+    @staticmethod
+    def _has_arabic_char(text: str) -> bool:
+        for ch in text:
+            code = ord(ch)
+            if 0x0600 <= code <= 0x06FF or 0x0750 <= code <= 0x077F or 0x08A0 <= code <= 0x08FF:
+                return True
+        return False

@@ -10,6 +10,7 @@ opencv-python==4.11.0.86
 numpy==2.2.6
 pyzbar==0.1.9
 pytesseract==0.3.13
+gunicorn
 rich==13.9.4
 duckduckgo-search==8.1.1
 beautifulsoup4==4.13.4

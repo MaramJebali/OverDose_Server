@@ -20,6 +20,7 @@ Return ONLY valid JSON with the following fields:
 - \"brand\": the product line or product brand (e.g., Danao)
 - \"company\": the manufacturer or parent company (e.g., Delice)
 - \"product_name\": the flavor/type of the product (no brand, no company)
+- \"category\": one of \"food\", \"cosmetic\", or \"unknown\"
 - \"confidence\": a number between 0 and 1 indicating confidence
 
 Rules:
@@ -41,6 +42,7 @@ Output:
     \"brand\": \"Danao\",
     \"company\": \"Delice\",
     \"product_name\": \"Peche Abricot\",
+    \"category\": \"food\",
     \"confidence\": 0.95
 }
 
@@ -52,6 +54,7 @@ Output:
     \"brand\": \"Danao\",
     \"company\": null,
     \"product_name\": \"خوخ ومشمش بالحليب\",
+    \"category\": \"food\",
     \"confidence\": 0.85
 }
 
@@ -179,6 +182,7 @@ class GrokService:
         brand = payload.get("brand")
         company = payload.get("company")
         product_name = payload.get("product_name")
+        category = payload.get("category")
         confidence = payload.get("confidence")
 
         if brand is not None and not isinstance(brand, str):
@@ -187,6 +191,14 @@ class GrokService:
             company = None
         if product_name is not None and not isinstance(product_name, str):
             product_name = None
+
+        if isinstance(category, str):
+            category = category.strip().lower()
+        else:
+            category = "unknown"
+
+        if category not in {"food", "cosmetic", "unknown"}:
+            category = "unknown"
 
         if isinstance(confidence, (int, float)):
             confidence_value: float | None = float(max(0.0, min(1.0, confidence)))
@@ -197,5 +209,6 @@ class GrokService:
             "brand": brand,
             "company": company,
             "product_name": product_name,
+            "category": category,
             "confidence": confidence_value,
         }

@@ -89,7 +89,14 @@ class PipelineOrchestrator:
         debug["barcode_source"] = barcode_from if barcode else "none"
         if barcode:
             debug["barcode_format"] = barcode.format_type
-            facts = await self._facts.fetch_by_barcode(barcode.code, debug=debug)
+            preferred_category = self._infer_preferred_category(detected_label)
+            if preferred_category is not None:
+                debug["barcode_inferred_category"] = preferred_category
+            facts = await self._facts.fetch_by_barcode(
+                barcode.code,
+                preferred_category=preferred_category,
+                debug=debug,
+            )
             if facts and facts.ingredients:
                 logger.info("[BARCODE] success product_id=%s", product_id)
                 result = ProductAnalysis(
@@ -127,7 +134,6 @@ class PipelineOrchestrator:
             lens is not None,
         )
         if lens:
-            preferred_category = self._infer_preferred_category(detected_label)
             debug["lens_candidates"] = lens.candidates
             if lens.upload_route:
                 debug["lens_upload_route"] = lens.upload_route
@@ -136,7 +142,6 @@ class PipelineOrchestrator:
             groq_lookup = await self._lookup_via_groq_brand_company(
                 lens.title,
                 debug,
-                preferred_category=preferred_category,
             )
             if groq_lookup is not None:
                 facts, groq_query = groq_lookup
@@ -162,30 +167,36 @@ class PipelineOrchestrator:
             if self._should_skip_raw_lens_fallback_after_groq(debug):
                 debug["lens_lookup"] = "skipped_raw_title_after_groq_structured_miss"
             else:
-                facts = await self._facts.fetch_by_name(
-                    lens.title,
-                    preferred_category=preferred_category,
-                    debug=debug,
-                )
-                if facts and facts.ingredients:
-                    logger.info("[LENS] success product_id=%s", product_id)
-                    result = ProductAnalysis(
-                        product_id=product_id,
-                        source="lens",
-                        confidence=self._score_confidence("lens", len(facts.ingredients), True),
-                        category=facts.category,
-                        name=facts.name,
-                        brand=facts.brand,
-                        ingredients=facts.ingredients,
-                        additives=facts.additives,
-                        lens_title=lens.title,
+                preferred_category = self._get_groq_category(debug)
+                if self._is_query_attempted(debug, lens.title):
+                    debug["lens_lookup"] = "skipped_duplicate_query"
+                else:
+                    self._record_query_attempt(debug, lens.title)
+                    facts = await self._facts.fetch_by_name(
+                        lens.title,
+                        preferred_category=preferred_category,
                         debug=debug,
                     )
-                    return self._persist_result(
-                        result,
-                        ean=barcode.code if barcode else None,
-                        extraction_method="pipeline:lens:name_lookup",
-                    )
+                    if facts and facts.ingredients:
+                        debug["facts_query_success"] = lens.title
+                        logger.info("[LENS] success product_id=%s", product_id)
+                        result = ProductAnalysis(
+                            product_id=product_id,
+                            source="lens",
+                            confidence=self._score_confidence("lens", len(facts.ingredients), True),
+                            category=facts.category,
+                            name=facts.name,
+                            brand=facts.brand,
+                            ingredients=facts.ingredients,
+                            additives=facts.additives,
+                            lens_title=lens.title,
+                            debug=debug,
+                        )
+                        return self._persist_result(
+                            result,
+                            ean=barcode.code if barcode else None,
+                            extraction_method="pipeline:lens:name_lookup",
+                        )
 
             debug.setdefault("lens_lookup", "no_ingredients")
         elif ready:
@@ -204,7 +215,7 @@ class PipelineOrchestrator:
             debug["ocr_text_chars"] = len(ocr.raw_text)
 
             if ocr.name:
-                preferred_category = self._infer_preferred_category(ocr.category, detected_label)
+                preferred_category = self._get_groq_category(debug)
                 facts = await self._facts.fetch_by_name(
                     ocr.name,
                     preferred_category=preferred_category,
@@ -368,36 +379,46 @@ class PipelineOrchestrator:
         brand_raw = extracted.get("brand")
         company_raw = extracted.get("company")
         product_name_raw = extracted.get("product_name")
+        category_raw = extracted.get("category")
         brand = brand_raw.strip() if isinstance(brand_raw, str) and brand_raw.strip() else None
         company = company_raw.strip() if isinstance(company_raw, str) and company_raw.strip() else None
         product_name = product_name_raw.strip() if isinstance(product_name_raw, str) and product_name_raw.strip() else None
+        product_name = self._clean_query_text(product_name)
+        if isinstance(category_raw, str):
+            category_value = category_raw.strip().lower()
+        else:
+            category_value = "unknown"
+
+        if category_value not in {"food", "cosmetic", "unknown"}:
+            category_value = "unknown"
+        category = category_value if category_value in {"food", "cosmetic"} else None
 
         debug["grok_brand"] = brand
         debug["grok_company"] = company
         debug["grok_product_name"] = product_name
+        debug["grok_category"] = category_value
         debug["grok_confidence"] = extracted.get("confidence")
 
         if preferred_category is None:
-            preferred_category = self._infer_preferred_category(product_name, brand, company)
+            preferred_category = category
             if preferred_category is not None:
                 debug["grok_inferred_category"] = preferred_category
 
         queries: list[str] = []
-        if product_name and brand and company:
-            queries.append(f"{product_name} {brand} {company}")
         if product_name and brand:
             queries.append(f"{product_name} {brand}")
         if product_name and company:
             queries.append(f"{product_name} {company}")
-        if product_name and not (brand or company):
+        if brand and company:
+            queries.append(f"{brand} {company}")
+        if product_name and brand and company:
+            queries.append(f"{product_name} {brand} {company}")
+        if product_name:
             queries.append(product_name)
-        if not product_name:
-            if brand and company:
-                queries.append(f"{brand} {company}")
-            if brand:
-                queries.append(brand)
-            if company:
-                queries.append(company)
+        if brand:
+            queries.append(brand)
+        if company:
+            queries.append(company)
 
         if not brand and not company:
             fallback_word = self._first_clean_word(best_lens_title)
@@ -412,12 +433,17 @@ class PipelineOrchestrator:
                 continue
             seen.add(key)
 
+            if self._is_query_attempted(debug, query):
+                continue
+            self._record_query_attempt(debug, query)
+
             facts = await self._facts.fetch_by_name(
                 query,
                 preferred_category=preferred_category,
                 debug=debug,
             )
             if facts and facts.ingredients:
+                debug["facts_query_success"] = query
                 if not self._is_relevant_facts_match(
                     facts_name=facts.name,
                     facts_brand=facts.brand,
@@ -461,6 +487,14 @@ class PipelineOrchestrator:
         return cleaned or None
 
     @staticmethod
+    def _clean_query_text(text: str | None) -> str | None:
+        if not text:
+            return None
+        cleaned = re.sub(r"\ball\s*[-–—]?\s*weather\b", " ", text, flags=re.IGNORECASE)
+        cleaned = " ".join(cleaned.split())
+        return cleaned or None
+
+    @staticmethod
     def _infer_preferred_category(*values: str | None) -> Literal["food", "cosmetic"] | None:
         merged = " ".join(v.strip().lower() for v in values if isinstance(v, str) and v.strip())
         if not merged:
@@ -491,6 +525,35 @@ class PipelineOrchestrator:
         if any(word in merged for word in food_keywords):
             return "food"
         return None
+
+    @staticmethod
+    def _get_groq_category(debug: dict[str, object]) -> Literal["food", "cosmetic"] | None:
+        value = debug.get("grok_inferred_category")
+        if value == "food":
+            return "food"
+        if value == "cosmetic":
+            return "cosmetic"
+        return None
+
+    @staticmethod
+    def _is_query_attempted(debug: dict[str, object], query: str) -> bool:
+        if not query:
+            return False
+        attempts = debug.get("facts_query_attempts")
+        if not isinstance(attempts, list):
+            return False
+        key = query.casefold()
+        return any(isinstance(item, str) and item.casefold() == key for item in attempts)
+
+    @staticmethod
+    def _record_query_attempt(debug: dict[str, object], query: str) -> None:
+        if not query:
+            return
+        attempts = debug.get("facts_query_attempts")
+        if not isinstance(attempts, list):
+            attempts = []
+            debug["facts_query_attempts"] = attempts
+        attempts.append(query)
 
     @classmethod
     def _is_relevant_facts_match(

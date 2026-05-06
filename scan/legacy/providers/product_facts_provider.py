@@ -14,8 +14,6 @@ OFF_BARCODE_URL = "https://world.openfoodfacts.org/api/v2/product/{barcode}.json
 OBF_BARCODE_URL = "https://world.openbeautyfacts.org/api/v0/product/{barcode}.json"
 OFF_SEARCH_URL = "https://world.openfoodfacts.org/cgi/search.pl"
 OBF_SEARCH_URL = "https://world.openbeautyfacts.org/cgi/search.pl"
-OFF_MAX_ATTEMPTS = 15
-
 
 class ProductFactsProvider:
     def __init__(self, http: HttpClient, settings: Settings, cache: SimpleTTLCache[dict]) -> None:
@@ -144,11 +142,7 @@ class ProductFactsProvider:
         params: dict[str, object] | None = None,
         headers: dict[str, str] | None = None,
     ) -> dict[str, Any] | None:
-        for _ in range(OFF_MAX_ATTEMPTS):
-            data = await self._http.get_json(url, params=params, headers=headers)
-            if data is not None:
-                return data
-        return None
+        return await self._http.get_json(url, params=params, headers=headers)
 
     def _cache_name_result(self, candidates: list[str], parsed: ProductFacts) -> None:
         payload = parsed.model_dump()

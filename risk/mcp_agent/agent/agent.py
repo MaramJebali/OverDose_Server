@@ -1,4 +1,4 @@
-"""agent/agent.py — FINAL FIX with subprocess cwd and env suppression"""
+"""agent/agent.py — persistent event loop fix for Django compatibility"""
 
 import asyncio
 import json
@@ -8,6 +8,10 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+
+# Windows requires ProactorEventLoop for subprocess support
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
 
 # Add the mcp_agent parent to path
 MCP_AGENT_ROOT = Path(__file__).parent.parent
@@ -153,16 +157,16 @@ class BiologicalAgent:
         self.state = AgentState()
         self.user_type = None
         self._servers_started = False
+        # One persistent loop for the entire agent lifetime.
+        # Subprocess pipes (stdin/stdout) are bound to the loop that created them
+        # and CANNOT be used from a different loop — so we must never close this loop.
+        self._loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self._loop)
         if start_servers:
             self._start_sync()
 
     def _start_sync(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        try:
-            loop.run_until_complete(self._start_servers())
-        finally:
-            loop.close()
+        self._loop.run_until_complete(self._start_servers())
         self._servers_started = True
 
     async def _start_servers(self):
@@ -182,12 +186,10 @@ class BiologicalAgent:
     def close(self):
         if not self._servers_started:
             return
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
         try:
-            loop.run_until_complete(self._stop_servers())
+            self._loop.run_until_complete(self._stop_servers())
         finally:
-            loop.close()
+            self._loop.close()
 
     async def _kg(self, tool, **kwargs):
         return await self.clients["kg"].call(tool, kwargs)
@@ -354,7 +356,7 @@ class BiologicalAgent:
 
     # ── Phase B: Investigate each chemical ───────────────────────────────────
     async def _investigate_chemical(self, name: str, product_usage: str = "cosmetics") -> dict:
-        logger.info(f"=== Investigating chemical: {name} (usage: {product_usage}) ===")
+        logger.debug(f"=== Investigating chemical: {name} (usage: {product_usage}) ===")
 
         if self.state.is_investigated(name):
             logger.debug(f"Chemical {name} already investigated, returning cached finding")
@@ -422,14 +424,117 @@ class BiologicalAgent:
             self.state.add_finding(finding)
             return finding
 
-        # NOT in KG
-        logger.warning(f"Chemical '{name}' not found in KG — marking UNKNOWN.")
+        # NOT in KG — try PubChem fallback
+        logger.debug(f"Chemical '{name}' not found in KG — trying PubChem fallback...")
+        try:
+            from servers.kg_server.pubchem_client import enrich_chemical_from_pubchem
+            pubchem_data = enrich_chemical_from_pubchem(name)
+        except Exception as e:
+            logger.warning(f"PubChem fallback failed for '{name}': {e}")
+            pubchem_data = {"found": False}
+
+        if pubchem_data.get("found"):
+            logger.info(
+                f"PubChem found '{name}' (CID={pubchem_data.get('cid')}): "
+                f"h_codes={pubchem_data.get('ghs_h_codes', [])}, "
+                f"organs={pubchem_data.get('target_organs', [])}, "
+                f"classes={pubchem_data.get('kg_classes', [])}"
+            )
+
+            # Build organ dicts compatible with risk_scoring
+            pc_organs = [{"name": o, "uid": None} for o in pubchem_data.get("target_organs", [])]
+            pc_h_codes = pubchem_data.get("ghs_h_codes", [])
+            pc_pictograms = [{"name": p} for p in pubchem_data.get("ghs_pictograms", [])]
+            pc_classes = pubchem_data.get("kg_classes", [])
+
+            risk_result = calculate_risk_for_chemical(
+                ghs_pictograms=pc_pictograms,
+                h_codes=pc_h_codes,
+                target_organs=pc_organs,
+                chemical_classes=pc_classes,
+                product_usage=product_usage,
+            )
+
+            logger.info(
+                f"PubChem risk for '{name}': total={risk_result['total_score']} "
+                f"→ verdict={risk_result['verdict']}"
+            )
+
+            pc_confidence = 0.4
+            if pc_h_codes:
+                pc_confidence += 0.2
+            if pc_organs:
+                pc_confidence += 0.15
+            if pc_classes:
+                pc_confidence += 0.1
+            pc_confidence = min(round(pc_confidence, 2), 0.85)
+
+            props = pubchem_data.get("properties") or {}
+            preferred = (
+                props.get("IUPACName")
+                or props.get("Title")
+                or name
+            )
+            finding["resolution"] = {
+                "original_name": name,
+                "uid": None,
+                "name": preferred,
+                "preferred_name": preferred,
+                "cas": None,
+                "molecular_formula": props.get("MolecularFormula"),
+                "molecular_weight": (
+                    str(props["MolecularWeight"]) if props.get("MolecularWeight") is not None else None
+                ),
+                "description": pubchem_data.get("description"),
+                "synonyms": [],
+                "match_strategy": "pubchem_match",
+                "confidence": pc_confidence,
+                "unresolved": False,
+                "error": None,
+                "pubchem_cid": pubchem_data.get("cid"),
+            }
+
+            finding.update({
+                "preliminary_risk": risk_result["verdict"],
+                "risk_score": risk_result["total_score"],
+                "risk_breakdown": risk_result["breakdown"],
+                "confidence": pc_confidence,
+                "kg_confidence": 0.0,
+                "h_codes": pc_h_codes,
+                "target_organs": [o.get("name") for o in pc_organs if o.get("name")],
+                "chemical_classes": pc_classes,
+                "source": "PUBCHEM",
+                "pubchem_cid": pubchem_data.get("cid"),
+                "hazard": {
+                    "h_codes": pc_h_codes,
+                    "highest_signal": pubchem_data.get("ghs_signal", "None"),
+                    "has_critical_hazard": any(
+                        c in {"H340", "H341", "H350", "H351", "H360", "H361", "H370", "H372"}
+                        for c in pc_h_codes
+                    ),
+                },
+                "exposure_limits": {"exposure_limits": []},
+                "full_profile": {
+                    "description": pubchem_data.get("description"),
+                    "data_confidence": pc_confidence,
+                    "preferred_name": preferred,
+                    "molecular_formula": props.get("MolecularFormula"),
+                    "chemical_classes": pc_classes,
+                },
+            })
+
+            await self._apply_personalisation(finding, name, risk_result["verdict"])
+            self.state.add_finding(finding)
+            return finding
+
+        # Neither KG nor PubChem found this chemical (expected often for OCR fragments)
+        logger.debug(f"Chemical '{name}' not found in KG or PubChem — marking UNKNOWN.")
         finding.update({
             "preliminary_risk": "UNKNOWN",
             "confidence": 0.0,
             "kg_confidence": 0.0,
             "recommended_depth": "basic",
-            "reasoning": f"{name} not found in Knowledge Graph",
+            "reasoning": f"{name} not found in Knowledge Graph or PubChem",
             "h_codes": [],
             "target_organs": [],
             "chemical_classes": [],
@@ -583,9 +688,14 @@ class BiologicalAgent:
                 uid = f.get("uid")
                 cas = f.get("resolution", {}).get("cas") if f.get("resolution") else None
 
+                res_conf = (
+                    f.get("confidence", 0.5)
+                    if f.get("source") == "PUBCHEM"
+                    else f.get("kg_confidence", 0.5)
+                )
                 resolution_info = create_resolution_info(
                     f.get("resolution", {}),
-                    f.get("kg_confidence", 0.5),
+                    res_conf,
                 )
 
                 full_profile = f.get("full_profile", {})
@@ -637,8 +747,11 @@ class BiologicalAgent:
                     ))
 
             for f in findings:
-                if (f.get("resolution", {}).get("unresolved")
-                        and f.get("name", "").upper() in product_ingredients):
+                if (
+                    f.get("resolution", {}).get("unresolved")
+                    and f.get("source") != "PUBCHEM"
+                    and f.get("name", "").upper() in product_ingredients
+                ):
                     unverified_list.append(UnverifiedChemical(
                         name=f.get("name", ""),
                         reason=f.get("reasoning", "Not found in Knowledge Graph"),
@@ -829,7 +942,8 @@ class BiologicalAgent:
                     "target_organs": c["body_effects"]["target_organs"],
                     "is_unresolved": c["resolution"]["fetch_status"] == "error",
                     "source": (
-                        "KG" if (c["resolution"].get("confidence") or 0) >= 0.7
+                        "PUBCHEM" if c["resolution"].get("method") == "pubchem"
+                        else "KG" if (c["resolution"].get("confidence") or 0) >= 0.7
                         else "UNKNOWN" if (c["resolution"].get("confidence") or 0) < 0.4
                         else "FUSED"
                     ),
@@ -905,13 +1019,10 @@ class BiologicalAgent:
     def run_sync(self, products_list: list, user_type: str = None) -> dict:
         if not self._servers_started:
             raise RuntimeError("Agent not started. Call start() first.")
-
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        try:
-            return loop.run_until_complete(self._run_async(products_list, user_type))
-        finally:
-            loop.close()
+        # Reuse the same persistent loop that was used to start the subprocesses.
+        # Creating a NEW loop here would leave subprocess stdin transports with a
+        # None proactor (the old loop's proactor is gone) → AttributeError crash.
+        return self._loop.run_until_complete(self._run_async(products_list, user_type))
 
     async def _run_async(self, products_list: list, user_type: str = None) -> dict:
         start = datetime.now(timezone.utc)

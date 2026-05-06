@@ -215,6 +215,7 @@ def create_resolution_info(resolution_result: dict, kg_confidence: float) -> Res
         "cas_match": "cas_exact",
         "synonym_match": "synonym",
         "partial_match": "fuzzy",
+        "pubchem_match": "pubchem",
         "not_found": "unresolved"
     }
     

@@ -1,66 +1,90 @@
-import asyncio
-import json
+# run_full_debug.py
 import sys
+import os
+import json
 from pathlib import Path
 
-# Add parent to path so we can import SERVER_PATHS
-sys.path.insert(0, str(Path(__file__).parent))
-from agent.agent import SERVER_PATHS
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
-async def test_server(name, path):
-    print(f"\n=== Testing {name} server ===")
-    server_dir = str(Path(path).parent)
-    env = {
-        "CHROMA_LOG_LEVEL": "WARNING",
-        "GRPC_VERBOSITY": "ERROR",
-        "TRANSFORMERS_VERBOSITY": "error",
-        "TOKENIZERS_PARALLELISM": "false",
-        "OMP_NUM_THREADS": "1",
-    }
-    proc = await asyncio.create_subprocess_exec(
-        sys.executable, path,
-        stdin=asyncio.subprocess.PIPE,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
-        cwd=server_dir,
-        env={**env, **dict(os.environ)}   # merge with current env
-    )
+# Disable scoring if chromadb missing
+import mcp_agent.agent.agent as agent_module
+if "scoring" in agent_module.SERVER_PATHS:
     try:
-        # Send initialize request
-        init_req = {"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {}}
-        proc.stdin.write((json.dumps(init_req) + "\n").encode())
-        await proc.stdin.drain()
-        # Wait for response
-        line = await asyncio.wait_for(proc.stdout.readline(), timeout=5.0)
-        if not line:
-            print(f"❌ {name}: No response (process died?)")
-            stderr = await proc.stderr.read()
-            if stderr:
-                print(f"stderr: {stderr.decode()}")
-            return
-        resp = json.loads(line.decode())
-        print(f"✅ {name}: initialize response received: {resp.get('result', {}).get('serverInfo', {}).get('name', 'unknown')}")
-        # Send tools/list
-        tools_req = {"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}
-        proc.stdin.write((json.dumps(tools_req) + "\n").encode())
-        await proc.stdin.drain()
-        line = await asyncio.wait_for(proc.stdout.readline(), timeout=5.0)
-        resp = json.loads(line.decode())
-        tools = resp.get('result', {}).get('tools', [])
-        print(f"✅ {name}: {len(tools)} tools found")
-    except Exception as e:
-        print(f"❌ {name}: Error - {e}")
-        stderr = await proc.stderr.read()
-        if stderr:
-            print(f"stderr: {stderr.decode()}")
-    finally:
-        proc.terminate()
-        await proc.wait()
+        import chromadb
+    except ImportError:
+        del agent_module.SERVER_PATHS["scoring"]
+        print("Scoring server disabled (chromadb missing)\n")
 
-async def main():
-    for name, path in SERVER_PATHS.items():
-        await test_server(name, path)
+from mcp_agent.agent.agent import BiologicalAgent
+
+class FullDebugAgent(BiologicalAgent):
+    """Prints complete JSON dump after each processing phase."""
+
+    async def _phase_filter(self, products_list):
+        print("\n" + "="*80)
+        print("PHASE A - FILTER (Groq classification)")
+        print("="*80)
+        result = await super()._phase_filter(products_list)
+        print("-> Full result:")
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return result
+
+    async def _investigate_chemical(self, name, product_usage="cosmetics"):
+        print(f"\nInvestigating: {name}")
+        result = await super()._investigate_chemical(name, product_usage)
+        print("-> Full finding:")
+        clean = {k:v for k,v in result.items() if k not in ('full_profile', 'complete_data')}
+        print(json.dumps(clean, indent=2, ensure_ascii=False))
+        return result
+
+    async def _phase_combination(self, findings, products_list):
+        print("\n" + "="*80)
+        print("PHASE C - COMBINATION (organ overlap, cumulative, hazard intersection)")
+        print("="*80)
+        result = await super()._phase_combination(findings, products_list)
+        print("-> Full result:")
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return result
+
+    def _build_final_report(self, products_list, filter_result, findings, combination):
+        print("\n" + "="*80)
+        print("PHASE D - FINAL REPORT")
+        print("="*80)
+        report = super()._build_final_report(products_list, filter_result, findings, combination)
+        print("-> Full report:")
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        return report
+
+    async def _enhance_with_scoring_server(self, report_dict):
+        print("\n" + "="*80)
+        print("PHASE E - SCORING SERVER (optional)")
+        print("="*80)
+        result = await super()._enhance_with_scoring_server(report_dict)
+        if 'scoring_analysis' in result:
+            print("-> Scoring analysis added (not printed fully to avoid clutter)")
+        else:
+            print("Scoring server not available.")
+        return result
+
+def run_full_debug(ingredients, user_type=None):
+    print("\nSTARTING AGENT IN FULL DEBUG MODE\n")
+    agent = FullDebugAgent(start_servers=True)
+    try:
+        product = {
+            "product_id": "debug_001",
+            "product_name": "Debug Product",
+            "product_usage": "cosmetic",
+            "exposure_type": "skin",
+            "ingredient_list": [{"name": ing} for ing in ingredients]
+        }
+        result = agent.run_sync([product], user_type=user_type)
+        print("\n" + "="*80)
+        print("EXECUTION COMPLETE")
+        print("="*80)
+        return result
+    finally:
+        agent.close()
 
 if __name__ == "__main__":
-    import os
-    asyncio.run(main())
+    test_ingredients = [ "Lysine", "Formaldehyde", "AQUA"]
+    run_full_debug(test_ingredients, user_type="fetal")

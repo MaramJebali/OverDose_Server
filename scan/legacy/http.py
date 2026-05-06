@@ -38,6 +38,15 @@ class HttpClient:
                 if "application/json" not in response.headers.get("Content-Type", "").lower():
                     return None
                 return response.json()
+            except httpx.HTTPStatusError as exc:
+                logger.error("HTTP GET failed url=%s error=%s", url, exc)
+                # 404 = product not found, 429 = rate limited — no point retrying
+                if exc.response.status_code in (404, 429):
+                    return None
+                if attempt >= retries:
+                    return None
+                sleep_seconds = backoff * (2 ** attempt)
+                await asyncio.sleep(sleep_seconds)
             except (httpx.TimeoutException, httpx.HTTPError, ValueError) as exc:
                 if attempt >= retries:
                     logger.error("HTTP GET failed url=%s error=%s", url, exc)
@@ -65,6 +74,14 @@ class HttpClient:
                 if "application/json" not in response.headers.get("Content-Type", "").lower():
                     return None
                 return response.json()
+            except httpx.HTTPStatusError as exc:
+                logger.error("HTTP POST failed url=%s error=%s", url, exc)
+                if exc.response.status_code in (404, 429):
+                    return None
+                if attempt >= retries:
+                    return None
+                sleep_seconds = backoff * (2 ** attempt)
+                await asyncio.sleep(sleep_seconds)
             except (httpx.TimeoutException, httpx.HTTPError, ValueError) as exc:
                 if attempt >= retries:
                     logger.error("HTTP POST failed url=%s error=%s", url, exc)

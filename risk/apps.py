@@ -12,7 +12,7 @@ class RiskConfig(AppConfig):
     def ready(self):
         # Pre‑initialise the agent when Django starts (optional, avoids first‑request delay)
         try:
-            from .services import get_agent
+            from .mcp_agent.agent_runner import get_agent
             get_agent()
             logger.info("BiologicalAgent pre‑initialised successfully")
         except Exception as e:

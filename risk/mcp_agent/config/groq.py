@@ -7,7 +7,9 @@ Changes:
 """
 
 import os
+import sys
 import json
+import logging
 import re
 import time
 from functools import lru_cache, wraps
@@ -16,6 +18,13 @@ from groq import Groq, APIError, RateLimitError, APIConnectionError
 from dotenv import load_dotenv
 
 load_dotenv()
+
+logger = logging.getLogger(__name__)
+logger.propagate = False
+if not logger.handlers:
+    _handler = logging.StreamHandler(sys.stderr)
+    _handler.setFormatter(logging.Formatter("%(levelname)s: %(message)s"))
+    logger.addHandler(_handler)
 
 
 def retry_with_backoff(max_retries=3, initial_delay=1, backoff_factor=2):
@@ -129,16 +138,31 @@ Return ONLY the JSON."""
                     {"role": "user", "content": user_prompt},
                 ],
                 temperature=0.0,  # DETERMINISTIC
-                max_tokens=2500
+                max_tokens=4000   # Increased: large ingredient lists need more tokens
             )
             raw = resp.choices[0].message.content.strip()
             clean = re.sub(r"^```(?:json)?\s*|\s*```$", "", raw, flags=re.MULTILINE).strip()
-            result = json.loads(clean)
+            try:
+                result = json.loads(clean)
+            except json.JSONDecodeError:
+                # Response was likely truncated — try to extract the largest parseable JSON object
+                m = re.search(r'(\{.*\})', clean, re.DOTALL)
+                if m:
+                    try:
+                        result = json.loads(m.group(1))
+                    except json.JSONDecodeError:
+                        logger.warning(
+                            "Classification error: could not parse JSON even after extraction"
+                        )
+                        return self._fallback_classification(ingredients)
+                else:
+                    logger.warning("Classification error: no JSON object found in response")
+                    return self._fallback_classification(ingredients)
             result.setdefault("chemicals", [])
             result.setdefault("safe_skipped", [])
             return result
         except Exception as e:
-            print(f"Classification error: {e}")
+            logger.warning("Classification error: %s", e)
             return self._fallback_classification(ingredients)
     
     def _fallback_classification(self, ingredients: list) -> dict:
@@ -200,7 +224,7 @@ Return ONLY the JSON."""
                     c["name"] = original_names_map[chem_name]
                     all_chemicals.append(c)
                 else:
-                    print(f"WARNING: LLM invented '{c.get('name')}' - ignoring")
+                    logger.warning("LLM invented %r — ignoring", c.get("name"))
             
             for s in result.get("safe_skipped", []):
                 safe_name = s.get("name", "").upper()
@@ -208,7 +232,7 @@ Return ONLY the JSON."""
                     s["name"] = original_names_map[safe_name]
                     all_safe.append(s)
                 else:
-                    print(f"WARNING: LLM invented '{s.get('name')}' - ignoring")
+                    logger.warning("LLM invented safe_skipped %r — ignoring", s.get("name"))
         
         # Add any missing ingredients (not classified by LLM)
         classified_names = {c["name"].upper() for c in all_chemicals} | {s["name"].upper() for s in all_safe}
@@ -287,20 +311,21 @@ def get_groq_client() -> GroqClient:
 
 
 if __name__ == "__main__":
-    print("=" * 60)
-    print("TESTING GROQ CLIENT")
-    print("=" * 60)
-    
+    logging.basicConfig(level=logging.INFO, stream=sys.stderr)
+    print("=" * 60, file=sys.stderr)
+    print("TESTING GROQ CLIENT", file=sys.stderr)
+    print("=" * 60, file=sys.stderr)
+
     client = get_groq_client()
-    print("✅ Groq client initialized")
-    
+    print("Groq client initialized", file=sys.stderr)
+
     result = client.classify_ingredients([
         {"name": "AQUA"},
         {"name": "WATER"},
         {"name": "GLYCERIN"},
         {"name": "SODIUM LAURETH SULFATE"},
     ], "cosmetic")
-    
-    print(f"Chemicals: {len(result.get('chemicals', []))}")
-    print(f"Safe: {len(result.get('safe_skipped', []))}")
-    print("✅ Groq client ready")
+
+    print(f"Chemicals: {len(result.get('chemicals', []))}", file=sys.stderr)
+    print(f"Safe: {len(result.get('safe_skipped', []))}", file=sys.stderr)
+    print("Groq client ready", file=sys.stderr)

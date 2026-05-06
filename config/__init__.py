@@ -1,29 +1,18 @@
+import logging
 import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Debug: print the current file location
-print(f"Config file location: {__file__}")
+logger = logging.getLogger(__name__)
 
-# Compute possible project root paths
-possible_roots = [
-    Path(__file__).parent.parent.parent,  # go up 3 levels
-    Path(__file__).parent.parent.parent.parent,  # go up 4 levels
-    Path.cwd(),  # current working directory
-]
+# .env is always next to manage.py (i.e. the Django project root = parent of config/)
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_dotenv_path = _PROJECT_ROOT / ".env"
 
-for i, root in enumerate(possible_roots):
-    env_path = root / '.env'
-    print(f"Option {i}: {env_path.resolve()} exists? {env_path.exists()}")
-    if env_path.exists():
-        dotenv_path = env_path
-        break
+if _dotenv_path.exists():
+    load_dotenv(dotenv_path=_dotenv_path, override=True)
 else:
-    # If none found, use current working directory (where manage.py is run from)
-    dotenv_path = Path.cwd() / '.env'
-    print(f"Using fallback: {dotenv_path.resolve()}")
-
-load_dotenv(dotenv_path=dotenv_path, override=True)
+    logger.warning("No .env file found at %s", _dotenv_path)
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
@@ -43,4 +32,4 @@ def validate():
         missing.append("NEO4J_PASSWORD")
     if missing:
         raise EnvironmentError(f"Missing environment variables: {', '.join(missing)}")
-    print("✅ Configuration validated")
+    logger.info("✅ Configuration validated")

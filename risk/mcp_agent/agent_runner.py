@@ -1,6 +1,18 @@
 # risk/mcp_agent/agent_runner.py
 import logging
-from .agent.agent import BiologicalAgent
+import sys
+from pathlib import Path
+
+# Allow running directly: python agent_runner.py
+# When run as part of Django package, relative imports work normally.
+if __name__ == "__main__":
+    # Add the Django project root to sys.path so absolute imports work
+    _DJANGO_ROOT = Path(__file__).resolve().parents[2]  # App_Django/
+    sys.path.insert(0, str(_DJANGO_ROOT))
+    from risk.mcp_agent.agent.agent import BiologicalAgent
+else:
+    from .agent.agent import BiologicalAgent
+
 logger = logging.getLogger(__name__)
 
 _AGENT = None
@@ -48,3 +60,13 @@ def analyze_product(ingredients_list, user_type=None):
             risk_items.append({"ingredient": name, "level": level})
 
     return risk_items, report
+
+
+if __name__ == "__main__":
+    import os
+    # Quick smoke test
+    logging.basicConfig(level=logging.INFO)
+    print("Starting agent smoke test...")
+    items, report = analyze_product(["DIMETHICONE", "PHENOXYETHANOL", "AQUA"])
+    print(f"Risk items: {items}")
+    print("Done.")

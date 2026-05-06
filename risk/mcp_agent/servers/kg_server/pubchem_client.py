@@ -102,6 +102,67 @@ def search_by_name(chemical_name: str) -> Optional[str]:
     return None
 
 
+# When PUG `compound/name/{x}` fails, try alternates (INCI, polymers, common spellings)
+INCI_NAME_FALLBACKS: Dict[str, List[str]] = {
+    "DIMETHICONE": [
+        "Dimethicone",
+        "Polydimethylsiloxane",
+        "Dimeticone",
+    ],
+    "SODIUM LAURETH SULFATE": [
+        "Sodium laureth sulfate",
+        "Sodium lauryl ether sulfate",
+        "Polyoxyethylene lauryl ether sodium sulfate",
+    ],
+    "PEG-IOO STEARATE": [
+        "PEG-100 stearate",
+        "Polyethylene glycol 100 stearate",
+    ],
+    "PARFUM": [
+        "Fragrance",
+        "Parfum",
+    ],
+    "FRAGRANCE": [
+        "Fragrance",
+        "Parfum",
+    ],
+}
+
+
+def search_by_name_with_fallbacks(chemical_name: str) -> Optional[str]:
+    """
+    Resolve a PubChem CID using the primary string, normalized spacing,
+    title case, and optional INCI synonym lists for hard-to-match names.
+    """
+    if not chemical_name or not chemical_name.strip():
+        return None
+
+    seen: set = set()
+    candidates: List[str] = []
+
+    def add(s: str) -> None:
+        t = s.strip()
+        if t and t not in seen:
+            seen.add(t)
+            candidates.append(t)
+
+    add(chemical_name)
+    compact = " ".join(chemical_name.split())
+    if compact != chemical_name.strip():
+        add(compact)
+    titled = compact.title()
+    if titled not in seen:
+        add(titled)
+    for syn in INCI_NAME_FALLBACKS.get(compact.upper(), []):
+        add(syn)
+
+    for name in candidates:
+        cid = search_by_name(name)
+        if cid:
+            return cid
+    return None
+
+
 # ============================================================
 # 2. Get Basic Properties (Simple JSON)
 # ============================================================
@@ -314,7 +375,7 @@ def enrich_chemical_from_pubchem(chemical_name: str) -> Dict[str, Any]:
         "error": str
     }
     """
-    cid = search_by_name(chemical_name)
+    cid = search_by_name_with_fallbacks(chemical_name)
     if not cid:
         return {
             "found": False,

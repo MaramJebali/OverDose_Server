@@ -228,6 +228,7 @@ def analyze_ingredients_risks(
 
     finally:
         agent.close()
+
 def analyze_cumulative_risks(
     products_with_reports: List[Dict[str, Any]],
     user_type: str = None,
@@ -260,7 +261,7 @@ def analyze_cumulative_risks(
         chemicals = report.get("ingredients", {}).get("chemicals_evaluated", [])
         prod_id = prod["product_id"]
         for chem in chemicals:
-            # Safely get verdict and its properties
+            # Safe handling of verdict which might be None
             verdict = chem.get("verdict")
             if verdict is None:
                 verdict = {}
@@ -318,6 +319,8 @@ def analyze_cumulative_risks(
     finally:
         if agent:
             agent.close()
+
+
 if __name__ == "__main__":
     test_ingredients = ["Lysine", "Formaldehyde", "AQUA"]
     risk_items, report, debug_log, filepath = analyze_ingredients_risks(test_ingredients, user_type="fetal")

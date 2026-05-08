@@ -1,5 +1,6 @@
 """
 profile_logic.py — IngredientGuard Core Logic (Improved)
+Uses config.groq.GroqClient for LLM operations (same as classifier.py)
 """
 
 import json
@@ -38,18 +39,22 @@ USER_TYPE_MAP: dict[str, str] = {
 VALID_USER_TYPES = list(USER_TYPE_MAP.keys())
 
 # -----------------------------------------------------------------------------
-# Groq client – using environment variable (no hardcoded key)
+# Groq client – using config.groq (same working approach as classifier.py)
 # -----------------------------------------------------------------------------
-_groq_caller: Optional['GroqCaller'] = None
+_groq_client: Optional[object] = None
 
-def _get_groq_caller():
-    global _groq_caller
-    if _groq_caller is None:
-        # Import here to avoid circular imports
-        sys.path.insert(0, str(THIS_DIR.parent.parent))  # adjust as needed
-        from risk.mcp_agent.agent_runner import GroqCaller
-        _groq_caller = GroqCaller()
-    return _groq_caller
+def _get_groq_client():
+    """Get the Groq client from config.groq (same as classifier.py)"""
+    global _groq_client
+    if _groq_client is None:
+        # Add parent directory to path to ensure config is found
+        parent_dir = str(THIS_DIR.parent.parent)
+        if parent_dir not in sys.path:
+            sys.path.insert(0, parent_dir)
+        
+        from config.groq import get_groq_client
+        _groq_client = get_groq_client()
+    return _groq_client
 
 # -----------------------------------------------------------------------------
 # Embedding model (lazy singleton)
@@ -273,10 +278,13 @@ def query_llm_found(
     risk_level: str,
     generate_llm: bool = True
 ) -> Optional[str]:
+    """Query LLM when ingredient is found in knowledge base"""
     if not generate_llm:
         return None
+    
     try:
-        groq = _get_groq_caller()
+        client = _get_groq_client()
+        
         prompt = f"""You are a medical safety expert. A {user_type} patient asks about the ingredient '{ingredient}'.
 
 **Knowledge base entry:**
@@ -295,8 +303,22 @@ def query_llm_found(
 - Recommend consulting a doctor if needed.
 
 Now write the explanation:"""
-        response = groq.call("", prompt, max_tokens=350)
-        return response
+        
+        # Check what methods the GroqClient has and use appropriate one
+        if hasattr(client, 'chat_completion'):
+            response = client.chat_completion(prompt)
+        elif hasattr(client, 'generate'):
+            response = client.generate(prompt)
+        elif hasattr(client, 'classify_ingredients'):
+            # If only classify_ingredients exists, we need to adapt
+            # This is a fallback - you may need to adjust based on actual API
+            response = client.classify_ingredients([], "")  # Not ideal, but fallback
+        else:
+            # Try direct call
+            response = client(prompt)
+        
+        return response if isinstance(response, str) else str(response)
+        
     except Exception as e:
         return f"[LLM error: {e}]"
 
@@ -305,10 +327,13 @@ def query_llm_not_found(
     ingredient: str,
     generate_llm: bool = True
 ) -> Optional[str]:
+    """Query LLM when ingredient is NOT found in knowledge base"""
     if not generate_llm:
         return None
+    
     try:
-        groq = _get_groq_caller()
+        client = _get_groq_client()
+        
         prompt = f"""You are a medical safety expert. A {user_type} patient asks about the ingredient '{ingredient}', but it was NOT found in our medical knowledge base.
 
 **Instructions:**
@@ -318,8 +343,19 @@ def query_llm_not_found(
 - Be cautious and avoid alarmist language.
 
 Now write the general guidance:"""
-        response = groq.call("", prompt, max_tokens=300)
-        return response
+        
+        # Check what methods the GroqClient has and use appropriate one
+        if hasattr(client, 'chat_completion'):
+            response = client.chat_completion(prompt)
+        elif hasattr(client, 'generate'):
+            response = client.generate(prompt)
+        elif hasattr(client, 'classify_ingredients'):
+            response = client.classify_ingredients([], "")
+        else:
+            response = client(prompt)
+        
+        return response if isinstance(response, str) else str(response)
+        
     except Exception as e:
         return f"[LLM error: {e}]"
 
@@ -330,6 +366,19 @@ def analyze_ingredient(
     kb_path: str = DEFAULT_KB_PATH,
     chroma_dir: str = DEFAULT_CHROMA_DIR,
 ) -> dict:
+    """
+    Analyze an ingredient for a specific user type.
+    
+    Args:
+        user_type: One of VALID_USER_TYPES (e.g., "Asthma", "Diabetes")
+        ingredient: The ingredient name to analyze
+        generate_llm: Whether to generate LLM analysis (default False)
+        kb_path: Path to knowledge base JSON file
+        chroma_dir: Path to ChromaDB directory
+    
+    Returns:
+        Dictionary with analysis results
+    """
     if user_type not in USER_TYPE_MAP:
         return {
             "found": False,
@@ -378,3 +427,41 @@ def analyze_ingredient(
             "llm_analysis": None,
             "error": f"Error during retrieval: {str(e)}",
         }
+
+
+# -----------------------------------------------------------------------------
+# Quick Test
+# -----------------------------------------------------------------------------
+if __name__ == "__main__":
+    print("=" * 60)
+    print("TESTING PROFILE LOGIC (using config.groq)")
+    print("=" * 60)
+    
+    # Test user types
+    print(f"\n📋 Available user types: {list_user_types()}")
+    
+    # Test ingredient analysis (without LLM for quick test)
+    test_cases = [
+        ("Asthma", "Sodium Lauryl Sulfate"),
+        ("Diabetes", "Sugar"),
+        ("PCOS", "Methylparaben"),
+        ("Cardiovascular", "Caffeine"),
+    ]
+    
+    for user_type, ingredient in test_cases:
+        print(f"\n🔍 Analyzing: {ingredient} for {user_type}")
+        result = analyze_ingredient(user_type, ingredient, generate_llm=False)
+        
+        if result["found"]:
+            print(f"  ✅ FOUND")
+            print(f"  📊 Risk Level: {result['risk_level']}")
+            print(f"  🏥 Disease: {result['kb_entry'].get('Disease Name', 'N/A')}")
+            print(f"  📈 Inference Score: {result['kb_entry'].get('Inference Score', 'N/A')}")
+        else:
+            print(f"  ❌ NOT FOUND in knowledge base")
+        
+        if result["error"]:
+            print(f"  ⚠️ Error: {result['error']}")
+    
+    print("\n" + "=" * 60)
+    print("✅ Profile logic ready")

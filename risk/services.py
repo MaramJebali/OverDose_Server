@@ -113,13 +113,51 @@ class DebugAgentWithCapture(BiologicalAgent):
 
 
 # ----------------------------------------------------------------------
-# 4. Main analysis functions
+# 4. Helper functions for extracting parts of the report
 # ----------------------------------------------------------------------
 logger = logging.getLogger(__name__)
 
+def extract_filtering_report(full_report: dict) -> dict:
+    """
+    Extract Phase A (filter) data from the full agent report.
+    Returns a dict with "chemicals" (list of chemical names) and "safe_skipped" (list of safe ingredients with reasons).
+    """
+    if not full_report or "products" not in full_report or not full_report["products"]:
+        return {"chemicals": [], "safe_skipped": []}
+    product_data = full_report["products"][0]
+    chemicals = [
+        chem["name"] for chem in product_data.get("ingredients", {}).get("chemicals_evaluated", [])
+    ]
+    safe_skipped = product_data.get("ingredients", {}).get("safe_skipped", [])
+    return {"chemicals": chemicals, "safe_skipped": safe_skipped}
+
+def extract_investigation_report(full_report: dict) -> dict:
+    """
+    Extract the subset of the report that should go into Product.investigation_report.
+    Keeps: product_id, product_name, usage, exposure_type, drivers, ingredients (full object), and summary.
+    Removes combination_risks (not needed).
+    """
+    if not full_report or "products" not in full_report or not full_report["products"]:
+        return {}
+    product_data = full_report["products"][0].copy()
+    product_data.pop("combination_risks", None)
+    return product_data
+
+def get_reports_folder() -> Path:
+    """Return path to reports folder, create if not exists."""
+    reports_path = Path(settings.BASE_DIR) / "reports"
+    reports_path.mkdir(exist_ok=True)
+    return reports_path
+
+
+# ----------------------------------------------------------------------
+# 5. Main analysis functions
+# ----------------------------------------------------------------------
 def analyze_ingredients_risks(
     ingredients_list: List[str],
-    user_type: str = None
+    user_type: str = None,
+    user_id: int = None,
+    product_id: int = None
 ) -> Tuple[List[Dict[str, str]], Dict[str, Any], List[str], str]:
     """
     Runs the full MCP agent (with debug prints and capture) and returns:
@@ -146,7 +184,7 @@ def analyze_ingredients_risks(
         result = agent.run_sync([product], user_type=user_type)
         report = result.get("report", {})
 
-        # Extract risk items as before
+        # Extract risk items
         risk_items = []
         for product_out in report.get("products", []):
             for chem in product_out.get("ingredients", {}).get("chemicals_evaluated", []):
@@ -160,23 +198,17 @@ def analyze_ingredients_risks(
                     level = "low"
                 risk_items.append({"ingredient": name, "level": level})
 
-        # Save full report to disk
+        # Save full report to disk inside reports/ folder with user/product naming
         try:
-            try:
-                from django.conf import settings
-                project_root = settings.BASE_DIR
-            except (ImportError, AttributeError):
-                project_root = Path(__file__).parent.parent
-                while not (project_root / "manage.py").exists():
-                    if project_root.parent == project_root:
-                        break
-                    project_root = project_root.parent
-
+            reports_dir = get_reports_folder()
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            first_ing = ingredients_list[0] if ingredients_list else "empty"
-            safe_name = "".join(c for c in first_ing if c.isalnum())[:20]
-            filename = f"agent_report_{timestamp}_{safe_name}.json"
-            filepath = project_root / filename
+            if user_id is not None and product_id is not None:
+                filename = f"user_{user_id}_product_{product_id}_{timestamp}.json"
+            else:
+                first_ing = ingredients_list[0] if ingredients_list else "empty"
+                safe_name = "".join(c for c in first_ing if c.isalnum())[:20]
+                filename = f"agent_report_{timestamp}_{safe_name}.json"
+            filepath = reports_dir / filename
             saved_file_path = str(filepath)
 
             with open(filepath, "w", encoding="utf-8") as f:
@@ -196,8 +228,6 @@ def analyze_ingredients_risks(
 
     finally:
         agent.close()
-
-
 def analyze_cumulative_risks(
     products_with_reports: List[Dict[str, Any]],
     user_type: str = None,
@@ -230,22 +260,29 @@ def analyze_cumulative_risks(
         chemicals = report.get("ingredients", {}).get("chemicals_evaluated", [])
         prod_id = prod["product_id"]
         for chem in chemicals:
+            # Safely get verdict and its properties
+            verdict = chem.get("verdict")
+            if verdict is None:
+                verdict = {}
+            
+            risk_calc = verdict.get("risk_calculation_breakdown", {}) if isinstance(verdict, dict) else {}
+            
             findings.append({
                 "name": chem.get("name"),
                 "uid": chem.get("uid"),
-                "target_organs": chem.get("body_effects", {}).get("target_organs", []),
-                "h_codes": chem.get("hazard", {}).get("h_codes", []),
-                "preliminary_risk": chem.get("verdict", {}).get("danger_level", "UNKNOWN"),
-                "risk_score": chem.get("verdict", {}).get("risk_calculation_breakdown", {}).get("total_score", 0),
-                "source": chem.get("resolution", {}).get("method", "cached"),
-                "confidence": chem.get("resolution", {}).get("confidence", 0.5),
-                "kg_confidence": chem.get("resolution", {}).get("confidence", 0.5),
-                "resolution": chem.get("resolution", {}),
-                "identity": chem.get("identity", {}),
-                "hazard": chem.get("hazard", {}),
-                "body_effects": chem.get("body_effects", {}),
-                "dose_evaluation": chem.get("dose_evaluation", {}),
-                "verdict": chem.get("verdict", {}),
+                "target_organs": chem.get("body_effects", {}).get("target_organs", []) if isinstance(chem.get("body_effects"), dict) else [],
+                "h_codes": chem.get("hazard", {}).get("h_codes", []) if isinstance(chem.get("hazard"), dict) else [],
+                "preliminary_risk": verdict.get("danger_level", "UNKNOWN") if isinstance(verdict, dict) else "UNKNOWN",
+                "risk_score": risk_calc.get("total_score", 0),
+                "source": chem.get("resolution", {}).get("method", "cached") if isinstance(chem.get("resolution"), dict) else "cached",
+                "confidence": chem.get("resolution", {}).get("confidence", 0.5) if isinstance(chem.get("resolution"), dict) else 0.5,
+                "kg_confidence": chem.get("resolution", {}).get("confidence", 0.5) if isinstance(chem.get("resolution"), dict) else 0.5,
+                "resolution": chem.get("resolution", {}) if isinstance(chem.get("resolution"), dict) else {},
+                "identity": chem.get("identity", {}) if isinstance(chem.get("identity"), dict) else {},
+                "hazard": chem.get("hazard", {}) if isinstance(chem.get("hazard"), dict) else {},
+                "body_effects": chem.get("body_effects", {}) if isinstance(chem.get("body_effects"), dict) else {},
+                "dose_evaluation": chem.get("dose_evaluation", {}) if isinstance(chem.get("dose_evaluation"), dict) else {},
+                "verdict": verdict if isinstance(verdict, dict) else {},
                 "personalisation": chem.get("personalisation"),
                 "product_id": prod_id,
             })
@@ -281,8 +318,6 @@ def analyze_cumulative_risks(
     finally:
         if agent:
             agent.close()
-
-
 if __name__ == "__main__":
     test_ingredients = ["Lysine", "Formaldehyde", "AQUA"]
     risk_items, report, debug_log, filepath = analyze_ingredients_risks(test_ingredients, user_type="fetal")

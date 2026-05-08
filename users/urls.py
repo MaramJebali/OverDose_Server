@@ -10,6 +10,7 @@ from .views import (
     RegisterAPIView,
     UserAllergyListCreateAPIView,
     UserListCreateAPIView,
+    CumulativeSummaryView,
 )
 
 urlpatterns = [
@@ -22,4 +23,6 @@ urlpatterns = [
     path("me/user-type/", CurrentUserTypeAPIView.as_view(), name="current-user-type"),
     path("allergies/", AllergyListCreateAPIView.as_view(), name="allergy-list-create"),
     path("user-allergies/", UserAllergyListCreateAPIView.as_view(), name="user-allergy-list-create"),
+    path("cumulative-summary/", CumulativeSummaryView.as_view(), name="cumulative-summary"),
+
 ]

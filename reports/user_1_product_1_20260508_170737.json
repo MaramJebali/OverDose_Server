@@ -1,5 +1,5 @@
 {
-  "timestamp": "20260508_035708",
+  "timestamp": "20260508_170737",
   "ingredients": [
     "AQUA",
     "WATER",
@@ -28,7 +28,7 @@
     "Z288697",
     "2"
   ],
-  "user_type": null,
+  "user_type": "",
   "risk_items": [
     {
       "ingredient": "SODIUM LAURETH SULFATE",
@@ -96,8 +96,8 @@
     }
   ],
   "full_report": {
-    "report_id": "rpt_20260508_035706",
-    "analyzed_at": "2026-05-08T03:57:06.638251",
+    "report_id": "rpt_20260508_170735",
+    "analyzed_at": "2026-05-08T17:07:35.738118",
     "agent_version": "3.1.0",
     "no_dose_data": true,
     "depth": "full",
@@ -1830,10 +1830,10 @@
       "critical_chemicals": [],
       "high_chemicals": [],
       "organs_under_pressure": [
-        "Respiratory system",
-        "Skin",
         "Eyes",
-        "Central nervous system"
+        "Central nervous system",
+        "Skin",
+        "Respiratory system"
       ],
       "depth_used": "full",
       "organ_global_analysis": {
@@ -2440,14 +2440,14 @@
       },
       "recurrence_risks": [],
       "global_organs_at_risk": [
-        "Respiratory system",
-        "Skin",
         "Eyes",
-        "Central nervous system"
+        "Central nervous system",
+        "Skin",
+        "Respiratory system"
       ],
       "global_high_chemicals": [],
-      "user_type_applied": null,
-      "llm_report": "**Chemical Risk Analysis Report**\n\n**1. Executive Summary**\n\nThis report presents the findings of a comprehensive chemical risk analysis for the product \"Product from Scan\" (product_id: django_scan). The analysis was conducted based on the provided data, which includes the product's total score, ingredient risk sum, overlap risk total, and ranking information. The results indicate that the product has a critical risk level, with a total product score of 109.68 and an ingredient risk sum of 13.5. The overlap risk total is 192.36, which suggests a potential cumulative organ overlap risk. This report will provide a detailed analysis of the individual ingredient risk, cross-product recurrence risk, cumulative organ overlap risk, product risk ranking, and recommendations for mitigating the identified risks.\n\n**2. Individual Ingredient Risk**\n\nThe ingredient risk sum for the product \"Product from Scan\" is 13.5. This value represents the total risk associated with the individual ingredients present in the product. However, without specific information on the individual ingredients, it is not possible to provide a detailed analysis of their respective risks. Therefore, this section will focus on the overall ingredient risk sum.\n\nThe ingredient risk sum of 13.5 indicates a moderate to high risk level, suggesting that the product contains one or more ingredients with significant toxicological concerns. To better understand the individual ingredient risks, it is recommended to conduct a more detailed analysis of the product's formulation and ingredient list.\n\n**3. Cross-Product Recurrence Risk**\n\nThe provided data does not include information on cross-product recurrence risks. Therefore, this section will be limited to stating that no data is available to assess the recurrence risk of the product's ingredients across different products.\n\n**4. Cumulative Organ Overlap Risk**\n\nThe overlap risk total for the product \"Product from Scan\" is 192.36. This value represents the cumulative risk associated with the overlap of toxicological effects on different organs. The high overlap risk total suggests a potential cumulative organ overlap risk, indicating that the product's ingredients may pose a significant risk to human health.\n\nTo better understand the cumulative organ overlap risk, it is recommended to conduct a more detailed analysis of the product's ingredients and their potential effects on human health. This may involve using toxicological models or databases to assess the overlap of toxicological effects on different organs.\n\n**5. Product Risk Ranking**\n\nThe product \"Product from Scan\" has been ranked as the highest-risk product, with a total product score of 109.68 and a critical risk level. This ranking indicates that the product poses a significant risk to human health and requires immediate attention.\n\n**6. Recommendations**\n\nBased on the analysis, the following recommendations are made:\n\n1. Conduct a detailed analysis of the product's formulation and ingredient list to better understand the individual ingredient risks.\n2. Use toxicological models or databases to assess the cumulative organ overlap risk and identify potential areas for mitigation.\n3. Develop a risk mitigation plan to address the identified risks, including the development of safer alternatives or reformulation of the product.\n4. Provide clear and concise labeling and instructions to consumers to minimize the risk of exposure to the product's ingredients.\n5. Conduct regular monitoring and testing to ensure that the product's risks are being effectively mitigated.\n\nBy implementing these recommendations, the product's risk level can be reduced, and the potential harm to human health can be minimized."
+      "user_type_applied": "",
+      "llm_report": "**Chemical Risk Analysis Report**\n\n**1. Executive Summary**\n\nThis report presents the findings of a comprehensive chemical risk analysis for the product \"Product from Scan\" (product_id: django_scan). The analysis was conducted based on the provided data, which includes the product's total score, ingredient risk sum, overlap risk total, and ranking information. The results indicate that the product has a critical risk level, with a total product score of 109.68 and an ingredient risk sum of 13.5. The overlap risk total is 192.36, which suggests a potential cumulative organ overlap risk. This report will provide a detailed analysis of the individual ingredient risk, cross-product recurrence risk, cumulative organ overlap risk, product risk ranking, and recommendations for mitigating the identified risks.\n\n**2. Individual Ingredient Risk**\n\nThe ingredient risk sum for the product \"Product from Scan\" is 13.5. This value represents the total risk associated with the individual ingredients present in the product. However, without specific information on the individual ingredients, it is not possible to provide a detailed analysis of their respective risks. Therefore, this section will focus on the overall ingredient risk sum.\n\nThe ingredient risk sum of 13.5 indicates a moderate to high risk level, suggesting that the product contains one or more ingredients with significant toxicological concerns. To better understand the individual ingredient risks, it is recommended to conduct a more detailed analysis of the product's formulation and ingredient list.\n\n**3. Cross-Product Recurrence Risk**\n\nThe provided data does not include information on cross-product recurrence risks. Therefore, this section will be limited to stating that no data is available to assess the recurrence risk of the product's ingredients across different products.\n\n**4. Cumulative Organ Overlap Risk**\n\nThe overlap risk total for the product \"Product from Scan\" is 192.36. This value represents the cumulative risk associated with the overlap of toxicological effects on multiple organs. The high overlap risk total suggests a potential cumulative organ overlap risk, indicating that the product's ingredients may pose a significant risk to human health.\n\nTo better understand the cumulative organ overlap risk, it is recommended to conduct a more detailed analysis of the product's ingredients and their potential effects on human health. This may involve using toxicological models or databases to assess the overlap of toxicological effects on multiple organs.\n\n**5. Product Risk Ranking**\n\nThe product \"Product from Scan\" has been ranked as the highest-risk product, with a total product score of 109.68 and a critical risk level. This ranking indicates that the product poses a significant risk to human health and requires immediate attention.\n\n**6. Recommendations**\n\nBased on the analysis, the following recommendations are made:\n\n1. Conduct a detailed analysis of the product's formulation and ingredient list to better understand the individual ingredient risks.\n2. Use toxicological models or databases to assess the cumulative organ overlap risk and identify potential areas for mitigation.\n3. Develop a risk mitigation plan to address the identified risks, including the development of safer alternatives or reformulation of the product.\n4. Provide clear and concise labeling and instructions to consumers to minimize the risk of exposure to the product's ingredients.\n5. Conduct regular monitoring and testing to ensure that the product's risks are being effectively mitigated.\n\nBy implementing these recommendations, the product's risk level can be reduced, and the potential harm to human health can be minimized."
     }
   }
 }

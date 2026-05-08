@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cumulative Risk Test</title>
+    <title>Complete System Test Dashboard</title>
     <style>
         * { box-sizing: border-box; }
         body { font-family: system-ui, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
@@ -14,9 +14,10 @@
         input, select, button { padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 0.9rem; }
         button { background: #0f766e; color: white; border: none; cursor: pointer; }
         button.secondary { background: #4b5563; }
+        button.danger { background: #b91c1c; }
         .log { background: #1e1e2f; color: #e2e8f0; padding: 16px; border-radius: 12px; overflow-x: auto; font-size: 0.8rem; font-family: monospace; }
         .product-item { border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; margin-bottom: 12px; background: #fafafa; }
-        .product-buttons { display: flex; gap: 8px; margin-top: 10px; }
+        .product-buttons { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
         .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; }
         .badge.approved { background: #dcfce7; color: #15803d; }
         .badge.rejected { background: #fee2e2; color: #b91c1c; }
@@ -25,12 +26,28 @@
         pre { margin: 0; white-space: pre-wrap; }
         .debug-log { display: none; margin-top: 12px; }
         .debug-log.show { display: block; }
+        .loading { opacity: 0.6; pointer-events: none; }
+        .product-name-link { color: #0f766e; cursor: pointer; text-decoration: underline; margin-right: 10px; }
+        .product-name-link:hover { color: #0d5c56; }
+        
+        /* Modal styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 5% auto; padding: 20px; width: 90%; max-width: 900px; border-radius: 16px; max-height: 80%; overflow-y: auto; }
+        .close { float: right; font-size: 28px; font-weight: bold; cursor: pointer; color: #aaa; }
+        .close:hover { color: #000; }
+        .image-gallery { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+        .image-item { border: 1px solid #e5e7eb; border-radius: 8px; padding: 8px; width: 150px; text-align: center; }
+        .image-item img { max-width: 100%; height: auto; border-radius: 4px; }
+        .image-item small { font-size: 0.7rem; color: #6b7280; }
+        .section-title { font-weight: bold; margin-top: 16px; margin-bottom: 8px; color: #0f766e; }
+        .json-preview { background: #f3f4f6; padding: 8px; border-radius: 8px; font-size: 0.75rem; overflow-x: auto; max-height: 200px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>🧪 Cumulative Risk Test</h1>
+    <h1>🧪 Complete System Test Dashboard</h1>
 
+    <!-- AUTH CARD -->
     <div class="card">
         <h2>🔐 Login / Register</h2>
         <div class="flex-row">
@@ -38,11 +55,12 @@
             <div style="flex:1"><label>Password</label><input type="password" id="login-password" placeholder="password" value="alice123"></div>
             <div><button id="btn-login">Login</button></div>
             <div><button id="btn-register" class="secondary">Register</button></div>
-            <div><button id="btn-logout" class="secondary" style="background:#b91c1c">Logout</button></div>
+            <div><button id="btn-logout" class="danger">Logout</button></div>
         </div>
         <div id="auth-status" class="log">Not logged in</div>
     </div>
 
+    <!-- SCAN CARD -->
     <div class="card" id="scan-card" style="display:none">
         <h2>📸 Scan Product</h2>
         <div class="flex-row">
@@ -54,12 +72,14 @@
             <pre id="debug-content" class="log"></pre>
         </div>
         <div id="scan-result" class="log">No scan yet</div>
+        <div id="saved-report-path" class="log" style="margin-top: 8px; display: none;"></div>
     </div>
 
+    <!-- PRODUCTS CARD -->
     <div class="card" id="products-card" style="display:none">
         <h2>📦 My Products</h2>
         <div class="flex-row">
-            <button id="filter-active" class="secondary">Active</button>
+            <button id="filter-active" class="secondary">Active (Approved+Saved)</button>
             <button id="filter-pending">Pending</button>
             <button id="filter-rejected">Rejected</button>
             <button id="filter-all">All</button>
@@ -68,13 +88,33 @@
         <div id="products-list">Loading...</div>
     </div>
 
+    <!-- CUMULATIVE REPORT CARD -->
     <div class="card" id="cumulative-card" style="display:none">
-        <h2>📊 Cumulative Report (global summary)</h2>
+        <h2>📊 Cumulative Report (User.ai_report)</h2>
         <div id="cumulative-summary" class="log"></div>
         <details><summary>Full JSON</summary><pre id="cumulative-full" class="log"></pre></details>
     </div>
 
+    <!-- CUMULATIVE SUMMARY ENDPOINT CARD (NEW) -->
+    <div class="card" id="cumulative-summary-endpoint-card" style="display:none">
+        <h2>📊 Cumulative Summary (Extracted Endpoint)</h2>
+        <div class="flex-row">
+            <div><button id="btn-cumulative-summary">Fetch /api/users/cumulative-summary/</button></div>
+        </div>
+        <div id="cumulative-summary-result" class="log">Click fetch to get extracted fields.</div>
+    </div>
+
+    <!-- API LOG CARD -->
     <div class="card"><h2>📜 API Log</h2><pre id="api-log" class="log">Ready.</pre></div>
+</div>
+
+<!-- MODAL FOR PRODUCT DETAILS -->
+<div id="product-modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h3 id="modal-title"></h3>
+        <div id="modal-body"></div>
+    </div>
 </div>
 
 <script>
@@ -115,11 +155,13 @@ async function updateUI() {
     var scanCard = document.getElementById('scan-card');
     var productsCard = document.getElementById('products-card');
     var cumulativeCard = document.getElementById('cumulative-card');
+    var cumulativeEndpointCard = document.getElementById('cumulative-summary-endpoint-card');
     if (token && currentUser) {
-        authDiv.innerHTML = '<span style="color:#10b981">✅ Logged in as ' + currentUser.email + '</span>';
+        authDiv.innerHTML = '<span style="color:#10b981">✅ Logged in as ' + currentUser.email + ' (type: ' + (currentUser.user_type || 'not set') + ')</span>';
         scanCard.style.display = 'block';
         productsCard.style.display = 'block';
         cumulativeCard.style.display = 'block';
+        cumulativeEndpointCard.style.display = 'block';
         await loadUserProducts();
         await loadCumulative();
     } else {
@@ -127,6 +169,10 @@ async function updateUI() {
         scanCard.style.display = 'none';
         productsCard.style.display = 'none';
         cumulativeCard.style.display = 'none';
+        cumulativeEndpointCard.style.display = 'none';
+        document.getElementById('products-list').innerHTML = 'Loading...';
+        document.getElementById('cumulative-summary').innerHTML = '';
+        document.getElementById('cumulative-full').textContent = '{}';
     }
 }
 
@@ -137,8 +183,10 @@ async function loadCumulative() {
         var g = r.global_summary || {};
         var html = '<strong>Organs under pressure:</strong> ' + (g.organs_under_pressure || []).join(', ') || 'None';
         html += '<br><strong>Critical chemicals:</strong> ' + (g.critical_chemicals || []).join(', ') || 'None';
+        html += '<br><strong>High chemicals:</strong> ' + (g.high_chemicals || []).join(', ') || 'None';
         html += '<br><strong>Products to avoid:</strong> ' + (g.products_to_avoid || 0);
         html += '<br><strong>Products to reduce:</strong> ' + (g.products_to_reduce || 0);
+        html += '<br><strong>Products safe:</strong> ' + (g.products_safe || 0);
         document.getElementById('cumulative-summary').innerHTML = html;
         document.getElementById('cumulative-full').textContent = JSON.stringify(r, null, 2);
     } else {
@@ -155,51 +203,151 @@ async function loadUserProducts(status) {
     if (!res.ok) return;
     var products = res.data.products || [];
     var counts = res.data.counts || {};
-    var html = '<div>Counts: ✅' + (counts.approved||0) + ' 💾' + (counts.saved||0) + ' ⏳' + (counts.pending||0) + ' ❌' + (counts.rejected||0) + '</div>';
-    for (var i = 0; i < products.length; i++) {
+    var html = '<div>Counts: ✅Approved:' + (counts.approved||0) + ' 💾Saved:' + (counts.saved||0) + ' ⏳Pending:' + (counts.pending||0) + ' ❌Rejected:' + (counts.rejected||0) + '</div>';
+    for (var i = 0; i < Math.min(products.length, 5); i++) {
         var p = products[i];
         var dec = p.user_decision || 'pending';
         html += '<div class="product-item">';
-        html += '<strong>' + p.name + '</strong> (' + (p.brand || '?') + ') <span class="badge ' + dec + '">' + dec + '</span>';
+        html += '<strong class="product-name-link" data-id="' + p.id + '" data-name="' + p.name + '">📄 ' + p.name + '</strong> (' + (p.brand || '?') + ') <span class="badge ' + dec + '">' + dec + '</span>';
         html += '<div class="product-buttons">';
         html += '<button class="approve" data-id="' + p.id + '">✅ Approve</button>';
         html += '<button class="reject" data-id="' + p.id + '">❌ Reject</button>';
         html += '<button class="save" data-id="' + p.id + '">💾 Save</button>';
+        html += '<button class="view-details" data-id="' + p.id + '" data-name="' + p.name + '">🔍 View Details</button>';
         html += '</div></div>';
     }
+    if (products.length > 5) {
+        html += '<div style="margin-top: 8px; color: #6b7280;">Showing first 5 of ' + products.length + ' products. Click "View Details" on any product.</div>';
+    }
     document.getElementById('products-list').innerHTML = html || '<div>No products</div>';
-    var approves = document.querySelectorAll('.approve');
-    for (var j = 0; j < approves.length; j++) {
-        approves[j].onclick = (function(id) { return function() { updateDecision(id, 'approved'); }; })(approves[j].getAttribute('data-id'));
+    
+    // Attach decision buttons
+    document.querySelectorAll('.approve').forEach(btn => btn.onclick = (function(id) { return function() { updateDecision(id, 'approved'); }; })(btn.dataset.id));
+    document.querySelectorAll('.reject').forEach(btn => btn.onclick = (function(id) { return function() { updateDecision(id, 'rejected'); }; })(btn.dataset.id));
+    document.querySelectorAll('.save').forEach(btn => btn.onclick = (function(id) { return function() { updateDecision(id, 'saved'); }; })(btn.dataset.id));
+    
+    // Attach view details buttons
+    document.querySelectorAll('.view-details').forEach(btn => btn.onclick = function() { showProductDetails(btn.dataset.id, btn.dataset.name); });
+    document.querySelectorAll('.product-name-link').forEach(el => el.onclick = function() { showProductDetails(el.dataset.id, el.dataset.name); });
+}
+
+async function showProductDetails(productId, productName) {
+    var modal = document.getElementById('product-modal');
+    var modalTitle = document.getElementById('modal-title');
+    var modalBody = document.getElementById('modal-body');
+    
+    modalTitle.textContent = productName + ' (ID: ' + productId + ')';
+    modalBody.innerHTML = '<div class="loading">Loading product details...</div>';
+    modal.style.display = 'block';
+    
+    // Fetch product analysis
+    var res = await apiCall('/api/products/' + productId + '/analysis/', 'GET');
+    if (!res.ok) {
+        modalBody.innerHTML = '<div class="loading" style="color:red;">Error loading product details</div>';
+        return;
     }
-    var rejects = document.querySelectorAll('.reject');
-    for (var k = 0; k < rejects.length; k++) {
-        rejects[k].onclick = (function(id) { return function() { updateDecision(id, 'rejected'); }; })(rejects[k].getAttribute('data-id'));
+    
+    var product = res.data.product;
+    var userDecision = res.data.user_decision;
+    var scanImages = res.data.scan_images || [];
+    
+    var html = '';
+    
+    // User decision info
+    if (userDecision) {
+        html += '<div class="section-title">Your Decision</div>';
+        html += '<div>Decision: <strong>' + userDecision.decision + '</strong></div>';
+        html += '<div>Notes: ' + (userDecision.notes || 'none') + '</div>';
+        html += '<div>Last updated: ' + new Date(userDecision.updated_at).toLocaleString() + '</div>';
     }
-    var saves = document.querySelectorAll('.save');
-    for (var l = 0; l < saves.length; l++) {
-        saves[l].onclick = (function(id) { return function() { updateDecision(id, 'saved'); }; })(saves[l].getAttribute('data-id'));
+    
+    // Filtering Report (Phase A)
+    if (product.filtering_report && Object.keys(product.filtering_report).length > 0) {
+        html += '<div class="section-title">📋 Filtering Report (Phase A)</div>';
+        html += '<div><strong>Chemicals to investigate:</strong> ' + (product.filtering_report.chemicals || []).join(', ') || 'none' + '</div>';
+        html += '<div><strong>Safe skipped ingredients:</strong></div>';
+        html += '<div class="json-preview">' + JSON.stringify(product.filtering_report.safe_skipped || [], null, 2) + '</div>';
+    } else {
+        html += '<div class="section-title">📋 Filtering Report (Phase A)</div><div>Not available</div>';
     }
+    
+    // Investigation Report (Phase B)
+    if (product.investigation_report && Object.keys(product.investigation_report).length > 0) {
+        html += '<div class="section-title">🔬 Investigation Report (Phase B)</div>';
+        html += '<div><strong>Product summary:</strong></div>';
+        if (product.investigation_report.summary) {
+            var s = product.investigation_report.summary;
+            html += '<div>Critical: ' + s.critical + ' | High: ' + s.high + ' | Moderate: ' + s.moderate + ' | Low: ' + s.low + ' | Unknown: ' + s.unknown + '</div>';
+        }
+        html += '<div><strong>Risk drivers:</strong> ' + (product.investigation_report.drivers || []).join(', ') || 'none' + '</div>';
+        html += '<details><summary>Full Investigation Report (chemicals evaluated)</summary>';
+        html += '<div class="json-preview">' + JSON.stringify(product.investigation_report, null, 2) + '</div>';
+        html += '</details>';
+    } else {
+        html += '<div class="section-title">🔬 Investigation Report (Phase B)</div><div>Not available</div>';
+    }
+    
+    // Images (only current user's images)
+    if (scanImages.length > 0) {
+        html += '<div class="section-title">🖼️ Your Uploaded Images</div>';
+        html += '<div class="image-gallery">';
+        for (var i = 0; i < scanImages.length; i++) {
+            html += '<div class="image-item"><img src="' + scanImages[i] + '" style="max-width:100px; max-height:100px;" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%23ddd%22/%3E%3Ctext x=%2250%22 y=%2250%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23999%22%3Eno img%3C/text%3E%3C/svg%3E\'"><br><small>Uploaded: ' + new Date().toLocaleString() + '</small></div>';
+        }
+        html += '</div>';
+    } else {
+        html += '<div class="section-title">🖼️ Your Uploaded Images</div><div>No images uploaded by you for this product.</div>';
+    }
+    
+    modalBody.innerHTML = html;
 }
 
 async function updateDecision(pid, decision) {
-    var res = await apiCall('/api/products/' + pid + '/decision/', 'PATCH', { decision: decision, notes: 'Test' });
+    var res = await apiCall('/api/products/' + pid + '/decision/', 'PATCH', { decision: decision, notes: 'Test via dashboard' });
     if (res.ok) {
+        log('Product ' + pid + ' set to ' + decision);
         await loadUserProducts();
         await loadCumulative();
+    } else {
+        log('Failed to update product ' + pid + ': ' + JSON.stringify(res.data), true);
+    }
+}
+
+async function fetchCumulativeSummary() {
+    var resultDiv = document.getElementById('cumulative-summary-result');
+    resultDiv.innerHTML = 'Loading...';
+    var res = await apiCall('/api/users/cumulative-summary/', 'GET');
+    if (res.ok) {
+        resultDiv.innerHTML = JSON.stringify(res.data, null, 2);
+    } else {
+        resultDiv.innerHTML = 'Error: ' + JSON.stringify(res.data);
     }
 }
 
 async function scan(file) {
+    var scanBtn = document.getElementById('btn-scan');
+    var originalText = scanBtn.textContent;
+    scanBtn.textContent = 'Scanning... (may take 1-2 minutes)';
+    scanBtn.disabled = true;
+    
     var fd = new FormData();
     fd.append('image', file);
     var res = await apiCall('/api/scan/', 'POST', fd, true);
+    
+    scanBtn.textContent = originalText;
+    scanBtn.disabled = false;
+    
     if (res.ok) {
         document.getElementById('scan-result').innerHTML = JSON.stringify(res.data, null, 2);
         if (res.data.agent_debug_log) {
             document.getElementById('debug-content').textContent = res.data.agent_debug_log.join('\n');
         } else {
             document.getElementById('debug-content').textContent = 'No agent debug log available.';
+        }
+        if (res.data.saved_report_path) {
+            var pathDiv = document.getElementById('saved-report-path');
+            pathDiv.innerHTML = '📁 Full report saved to: <strong>' + res.data.saved_report_path + '</strong>';
+            pathDiv.style.display = 'block';
         }
         await loadUserProducts();
         await loadCumulative();
@@ -208,6 +356,13 @@ async function scan(file) {
     }
 }
 
+// Modal close functionality
+var modal = document.getElementById('product-modal');
+var closeSpan = document.getElementsByClassName('close')[0];
+closeSpan.onclick = function() { modal.style.display = 'none'; };
+window.onclick = function(event) { if (event.target == modal) { modal.style.display = 'none'; } };
+
+// Event listeners
 document.getElementById('btn-login').onclick = async function() {
     var email = document.getElementById('login-email').value;
     var pwd = document.getElementById('login-password').value;
@@ -217,12 +372,14 @@ document.getElementById('btn-login').onclick = async function() {
         currentUser = res.data.user;
         localStorage.setItem('token', token);
         await updateUI();
+        await fetchCumulativeSummary(); // test endpoint automatically
     } else alert('Login failed: ' + JSON.stringify(res.data));
 };
 document.getElementById('btn-register').onclick = async function() {
     var email = document.getElementById('login-email').value;
     var pwd = document.getElementById('login-password').value;
-    var payload = { first_name: email.split('@')[0], last_name: 'Test', email: email, password: pwd, user_type: 'diabetes' };
+    var name = email.split('@')[0];
+    var payload = { first_name: name, last_name: 'Test', email: email, password: pwd, user_type: 'diabetes' };
     var res = await apiCall('/api/users/auth/register/', 'POST', payload, false);
     if (res.ok) {
         token = res.data.token;
@@ -244,20 +401,22 @@ document.getElementById('btn-scan').onclick = function() {
 };
 document.getElementById('btn-show-debug').onclick = function() {
     var panel = document.getElementById('debug-panel');
-    if (panel.classList) panel.classList.toggle('show');
-    else panel.className = (panel.className === 'debug-log' ? 'debug-log show' : 'debug-log');
+    panel.classList.toggle('show');
 };
 document.getElementById('filter-active').onclick = function() { loadUserProducts('active'); };
 document.getElementById('filter-pending').onclick = function() { loadUserProducts('pending'); };
 document.getElementById('filter-rejected').onclick = function() { loadUserProducts('rejected'); };
 document.getElementById('filter-all').onclick = function() { loadUserProducts('all'); };
 document.getElementById('refresh-products').onclick = function() { loadUserProducts(); };
+document.getElementById('btn-cumulative-summary').onclick = function() { fetchCumulativeSummary(); };
 
+// Initial load
 if (token) {
     apiCall('/api/users/me/', 'GET').then(function(res) {
         if (res.ok) {
             currentUser = res.data;
             updateUI();
+            fetchCumulativeSummary();
         } else {
             token = null;
             localStorage.removeItem('token');

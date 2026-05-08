@@ -17,7 +17,12 @@ from scan.legacy.runtime import (
 )
 
 from recommendation.views import build_mock_recommendations
-from risk.services import analyze_ingredients_risks, analyze_cumulative_risks
+from risk.services import (
+    analyze_ingredients_risks,
+    analyze_cumulative_risks,
+    extract_filtering_report,
+    extract_investigation_report
+)
 
 from products.models import Product, UserProductDecision
 
@@ -133,11 +138,22 @@ class ScanPipelineAPIView(APIView):
                 if not product.investigation_report or product.investigation_report == {}:
                     logger.info(f"Product {product.id} has empty investigation_report, refilling...")
                     user_type = request.user.user_type if request.user.is_authenticated else None
-                    risk_items, full_agent_report, debug_log, file_path = analyze_ingredients_risks(ingredients, user_type=user_type)
+                    risk_items, full_agent_report, debug_log, file_path = analyze_ingredients_risks(
+                        ingredients,
+                        user_type=user_type,
+                        user_id=request.user.id if request.user.is_authenticated else None,
+                        product_id=product.id
+                    )
                     agent_debug_log = debug_log
                     saved_report_path = file_path
-                    product.investigation_report = full_agent_report
-                    product.save(update_fields=["investigation_report", "updated_at"])
+
+                    # Extract filtering and investigation parts
+                    filtering_data = extract_filtering_report(full_agent_report)
+                    investigation_data = extract_investigation_report(full_agent_report)
+
+                    product.filtering_report = filtering_data
+                    product.investigation_report = investigation_data
+                    product.save(update_fields=["filtering_report", "investigation_report", "updated_at"])
                 else:
                     risk_items = []
                     full_agent_report = product.investigation_report
@@ -165,11 +181,22 @@ class ScanPipelineAPIView(APIView):
                 )
 
                 user_type = request.user.user_type if request.user.is_authenticated else None
-                risk_items, full_agent_report, debug_log, file_path = analyze_ingredients_risks(ingredients, user_type=user_type)
+                risk_items, full_agent_report, debug_log, file_path = analyze_ingredients_risks(
+                    ingredients,
+                    user_type=user_type,
+                    user_id=request.user.id if request.user.is_authenticated else None,
+                    product_id=product.id
+                )
                 agent_debug_log = debug_log
                 saved_report_path = file_path
-                product.investigation_report = full_agent_report
-                product.save(update_fields=["investigation_report", "updated_at"])
+
+                # Extract filtering and investigation parts
+                filtering_data = extract_filtering_report(full_agent_report)
+                investigation_data = extract_investigation_report(full_agent_report)
+
+                product.filtering_report = filtering_data
+                product.investigation_report = investigation_data
+                product.save(update_fields=["filtering_report", "investigation_report", "updated_at"])
 
             # Link scan to product
             scan.product = product
@@ -236,18 +263,17 @@ class ScanPipelineAPIView(APIView):
             if product.investigation_report and not risk_items:
                 try:
                     report = product.investigation_report
-                    if isinstance(report, dict) and 'products' in report:
-                        for product_out in report.get('products', []):
-                            for chem in product_out.get('ingredients', {}).get('chemicals_evaluated', []):
-                                name = chem.get('name')
-                                danger = chem.get('verdict', {}).get('danger_level', 'UNKNOWN')
-                                if danger in ("CRITICAL", "HIGH"):
-                                    level = "high"
-                                elif danger == "MODERATE":
-                                    level = "medium"
-                                else:
-                                    level = "low"
-                                risk_items.append({"ingredient": name, "level": level})
+                    if isinstance(report, dict) and 'ingredients' in report:
+                        for chem in report.get('ingredients', {}).get('chemicals_evaluated', []):
+                            name = chem.get('name')
+                            danger = chem.get('verdict', {}).get('danger_level', 'UNKNOWN')
+                            if danger in ("CRITICAL", "HIGH"):
+                                level = "high"
+                            elif danger == "MODERATE":
+                                level = "medium"
+                            else:
+                                level = "low"
+                            risk_items.append({"ingredient": name, "level": level})
                 except Exception as e:
                     logger.warning(f"Could not extract risks from report: {e}")
         else:

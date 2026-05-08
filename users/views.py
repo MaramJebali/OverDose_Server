@@ -17,6 +17,10 @@ from .serializers import (
 )
 
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
 class UserListCreateAPIView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -156,3 +160,24 @@ from django.shortcuts import render
 
 def test_cumulative(request):
     return render(request, 'test_cumulative.html')
+
+
+
+class CumulativeSummaryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        report = request.user.ai_report
+        if not report or not isinstance(report, dict):
+            return Response({"detail": "No cumulative report available."}, status=status.HTTP_404_NOT_FOUND)
+
+        extracted = {
+            "global_summary": report.get("global_summary"),
+            "product_verdicts": report.get("product_verdicts"),
+            "scoring_analysis": report.get("scoring_analysis"),
+            "combination_risks": report.get("combination_risks"),
+            "overall_assessment": report.get("overall_assessment"),
+            "safe_ingredients": report.get("safe_ingredients"),
+            "unverified_chemicals": report.get("unverified_chemicals"),
+        }
+        return Response(extracted)

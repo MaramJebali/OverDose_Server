@@ -4,14 +4,8 @@ servers/filter_server/server.py
 MCP SERVER — Ingredient Filter
 Transport: stdio (JSON-RPC 2.0)
 
-REWRITTEN: was FastMCP, now raw JSON-RPC.
-Reason: all servers must use the same protocol so the MCPClient
-in agent/agent.py can connect to them uniformly via subprocess.
-FastMCP uses a different startup handshake that breaks our client.
-
 1 tool:
   classify_ingredients — uses Groq LLM to separate chemicals from safe fillers
-
 Why LLM and not a hardcoded list:
   OCR and barcode ingredient names are messy and inconsistent.
   "Aqua", "Water", "Eau", "Purified Water", "H2O" are all water.

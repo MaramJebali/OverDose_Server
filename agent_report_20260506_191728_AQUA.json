@@ -1,0 +1,2509 @@
+{
+  "timestamp": "20260506_191728",
+  "ingredients": [
+    "AQUA",
+    "WATER",
+    "SODIUM LAURETH SULFATE",
+    "PEG-200 HYDROGENATED GLYCERYL PALMATE",
+    "COCO-BETAINE",
+    "SODIUM CHLORIDE",
+    "SODIUM BENZOATE",
+    "SODIUM HYDROXIDE",
+    "SIMMONDSIA CHINENSIS SEED OIL",
+    "JOJOBA SEED OIL",
+    "CITRIC ACID",
+    "POLYSORBATE 20",
+    "HEXYLENE GLYCOL",
+    "POLYQUATERNIUM-10",
+    "BUTYROSPERMUM PARKII BUTTER",
+    "SHEA BUTTER",
+    "PEG-7 GLYCERYL COCOATE",
+    "CI 14700",
+    "RED 4",
+    "CI 47005",
+    "ACID YELLOW 3",
+    "PARFUM",
+    "FRAGRANCE",
+    "F.I.L",
+    "Z288697",
+    "2"
+  ],
+  "user_type": null,
+  "risk_items": [
+    {
+      "ingredient": "SODIUM LAURETH SULFATE",
+      "level": "low"
+    },
+    {
+      "ingredient": "PEG-200 HYDROGENATED GLYCERYL PALMATE",
+      "level": "low"
+    },
+    {
+      "ingredient": "COCO-BETAINE",
+      "level": "low"
+    },
+    {
+      "ingredient": "SODIUM BENZOATE",
+      "level": "low"
+    },
+    {
+      "ingredient": "SODIUM HYDROXIDE",
+      "level": "medium"
+    },
+    {
+      "ingredient": "POLYSORBATE 20",
+      "level": "low"
+    },
+    {
+      "ingredient": "HEXYLENE GLYCOL",
+      "level": "medium"
+    },
+    {
+      "ingredient": "POLYQUATERNIUM-10",
+      "level": "low"
+    },
+    {
+      "ingredient": "CI 14700",
+      "level": "low"
+    },
+    {
+      "ingredient": "RED 4",
+      "level": "low"
+    },
+    {
+      "ingredient": "CI 47005",
+      "level": "low"
+    },
+    {
+      "ingredient": "ACID YELLOW 3",
+      "level": "low"
+    },
+    {
+      "ingredient": "PARFUM",
+      "level": "low"
+    },
+    {
+      "ingredient": "FRAGRANCE",
+      "level": "low"
+    },
+    {
+      "ingredient": "F.I.L",
+      "level": "low"
+    },
+    {
+      "ingredient": "Z288697",
+      "level": "low"
+    },
+    {
+      "ingredient": "2",
+      "level": "low"
+    }
+  ],
+  "full_report": {
+    "report_id": "rpt_20260506_191726",
+    "analyzed_at": "2026-05-06T19:17:26.704059",
+    "agent_version": "3.1.0",
+    "no_dose_data": true,
+    "depth": "full",
+    "products": [
+      {
+        "product_id": "django_scan",
+        "product_name": "Product from Scan",
+        "usage": "cosmetic",
+        "exposure_type": [
+          "skin"
+        ],
+        "drivers": [],
+        "ingredients": {
+          "chemicals_evaluated": [
+            {
+              "name": "SODIUM LAURETH SULFATE",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "done",
+                "method": "pubchem",
+                "confidence": 0.5,
+                "matched_name": "sodium 2-dodecoxyethyl sulfate",
+                "flag": null,
+                "error_message": null
+              },
+              "identity": {
+                "fetch_status": "done",
+                "preferred_name": "sodium 2-dodecoxyethyl sulfate",
+                "molecular_formula": "C14H29NaO5S",
+                "chemical_classes": [
+                  "Cosmetics",
+                  "Food Contact Substances",
+                  "Surfactants",
+                  "Polymers"
+                ],
+                "use_categories": [],
+                "confidence": 0.5,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "done",
+                "worst_signal": "",
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.5,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "done",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": false
+                  }
+                },
+                "confidence": 0.5,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "done",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": false,
+                "limits_count": 0,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "SAFE",
+                "justification": [
+                  "Risk score: 0.9 - SAFE"
+                ],
+                "risk_calculation_breakdown": {
+                  "hazard": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No hazard data available"
+                  },
+                  "organ": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No target organs identified"
+                  },
+                  "class": {
+                    "raw_score": 3,
+                    "weight": 0.2,
+                    "contribution": 0.6,
+                    "justification": "Chemical class: Food Contact Substances (score: 3)"
+                  },
+                  "usage": {
+                    "raw_score": 3,
+                    "weight": 0.1,
+                    "contribution": 0.3,
+                    "justification": "Product usage: cosmetic (exposure relevance: 3)"
+                  }
+                }
+              },
+              "personalisation": null
+            },
+            {
+              "name": "PEG-200 HYDROGENATED GLYCERYL PALMATE",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: PEG-200 HYDROGENATED GLYCERYL PALMATE"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "PEG-200 HYDROGENATED GLYCERYL PALMATE not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "COCO-BETAINE",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: COCO-BETAINE"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "COCO-BETAINE not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "SODIUM BENZOATE",
+              "uid": "cosing_532_32_1",
+              "cas": "532-32-1",
+              "resolution": {
+                "fetch_status": "done",
+                "method": "synonym",
+                "confidence": 1.0,
+                "matched_name": "Benzoic acid and its sodium salt",
+                "flag": null,
+                "error_message": null
+              },
+              "identity": {
+                "fetch_status": "done",
+                "preferred_name": "Benzoic acid and its sodium salt",
+                "molecular_formula": "C7H5NaO2",
+                "chemical_classes": [
+                  "Cosmetics",
+                  "CosIng",
+                  "Drugs",
+                  "Drug Clinical Phase",
+                  "Food Additives"
+                ],
+                "use_categories": [
+                  {
+                    "industry_count": null,
+                    "name": null,
+                    "source": null,
+                    "consumer_count": null
+                  }
+                ],
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "done",
+                "worst_signal": "Warning",
+                "h_codes": [
+                  "H319"
+                ],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "done",
+                "target_organs": [
+                  {
+                    "uid": null,
+                    "name": null
+                  }
+                ],
+                "excretion_routes": [
+                  "Urine"
+                ],
+                "exposure_effects": {
+                  "skin": {
+                    "name": "Rash",
+                    "relevant": true
+                  },
+                  "eyes": {
+                    "name": "Redness",
+                    "relevant": true
+                  },
+                  "inhalation": {
+                    "name": "Cough",
+                    "relevant": true
+                  },
+                  "ingestion": {
+                    "name": "Vomiting",
+                    "relevant": true
+                  }
+                },
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "done",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": true,
+                "limits_count": 1,
+                "strictest_limit": {
+                  "standard": null,
+                  "type": null,
+                  "value": null,
+                  "unit": null
+                },
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "LOW",
+                "justification": [
+                  "Risk score: 2.15 - LOW"
+                ],
+                "risk_calculation_breakdown": {
+                  "hazard": {
+                    "raw_score": 3,
+                    "weight": 0.35,
+                    "contribution": 1.05,
+                    "justification": "Direct GHS pictogram: Irritant"
+                  },
+                  "organ": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No valid target organs with names"
+                  },
+                  "class": {
+                    "raw_score": 4,
+                    "weight": 0.2,
+                    "contribution": 0.8,
+                    "justification": "Chemical class: Drugs (score: 4)"
+                  },
+                  "usage": {
+                    "raw_score": 3,
+                    "weight": 0.1,
+                    "contribution": 0.3,
+                    "justification": "Product usage: cosmetic (exposure relevance: 3)"
+                  }
+                }
+              },
+              "personalisation": null
+            },
+            {
+              "name": "SODIUM HYDROXIDE",
+              "uid": "cosing_1310_73_2",
+              "cas": "1310-73-2",
+              "resolution": {
+                "fetch_status": "done",
+                "method": "synonym",
+                "confidence": 1.0,
+                "matched_name": "Potassium or sodium hydroxide",
+                "flag": null,
+                "error_message": null
+              },
+              "identity": {
+                "fetch_status": "done",
+                "preferred_name": "Potassium or sodium hydroxide",
+                "molecular_formula": "HNaO",
+                "chemical_classes": [
+                  "Cosmetics",
+                  "CosIng",
+                  "Drug Clinical Phase",
+                  "Food Additives",
+                  "Food Contact Substances",
+                  "Pesticides"
+                ],
+                "use_categories": [
+                  {
+                    "industry_count": null,
+                    "name": null,
+                    "source": null,
+                    "consumer_count": null
+                  }
+                ],
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "done",
+                "worst_signal": "Danger",
+                "h_codes": [
+                  "H319",
+                  "H315",
+                  "H335",
+                  "H318",
+                  "H370",
+                  "H314",
+                  "H290"
+                ],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "done",
+                "target_organs": [
+                  {
+                    "uid": "organ_respiratory_system",
+                    "name": "Respiratory system"
+                  },
+                  {
+                    "uid": "organ_eyes",
+                    "name": "Eyes"
+                  },
+                  {
+                    "uid": "organ_skin",
+                    "name": "Skin"
+                  }
+                ],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": "Redness",
+                    "relevant": true
+                  },
+                  "eyes": {
+                    "name": "Redness",
+                    "relevant": true
+                  },
+                  "inhalation": {
+                    "name": "Cough",
+                    "relevant": true
+                  },
+                  "ingestion": {
+                    "name": "Vomiting",
+                    "relevant": true
+                  }
+                },
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "done",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": true,
+                "limits_count": 2,
+                "strictest_limit": {
+                  "standard": "NIOSH",
+                  "type": "Ceiling",
+                  "value": "2",
+                  "unit": "mg/m3"
+                },
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "MODERATE",
+                "justification": [
+                  "Risk score: 3.55 - MODERATE"
+                ],
+                "risk_calculation_breakdown": {
+                  "hazard": {
+                    "raw_score": 5,
+                    "weight": 0.35,
+                    "contribution": 1.75,
+                    "justification": "Direct GHS pictogram: Health Hazard"
+                  },
+                  "organ": {
+                    "raw_score": 2,
+                    "weight": 0.35,
+                    "contribution": 0.7,
+                    "justification": "Organs affected: Respiratory system, Eyes, Skin (average severity: 2.3)"
+                  },
+                  "class": {
+                    "raw_score": 4,
+                    "weight": 0.2,
+                    "contribution": 0.8,
+                    "justification": "Chemical class: Drug Clinical Phase (score: 4)"
+                  },
+                  "usage": {
+                    "raw_score": 3,
+                    "weight": 0.1,
+                    "contribution": 0.3,
+                    "justification": "Product usage: cosmetic (exposure relevance: 3)"
+                  }
+                }
+              },
+              "personalisation": null
+            },
+            {
+              "name": "POLYSORBATE 20",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: POLYSORBATE 20"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "POLYSORBATE 20 not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "HEXYLENE GLYCOL",
+              "uid": "cpid_023f63ed88",
+              "cas": "107-41-5",
+              "resolution": {
+                "fetch_status": "done",
+                "method": "name_exact",
+                "confidence": 1.0,
+                "matched_name": "Hexylene glycol",
+                "flag": null,
+                "error_message": null
+              },
+              "identity": {
+                "fetch_status": "done",
+                "preferred_name": "Hexylene glycol",
+                "molecular_formula": "C6H14O2",
+                "chemical_classes": [
+                  "Cosmetics",
+                  "Drug Clinical Phase",
+                  "Food Contact Substances",
+                  "Fragrances",
+                  "Polymers"
+                ],
+                "use_categories": [
+                  {
+                    "industry_count": null,
+                    "name": null,
+                    "source": null,
+                    "consumer_count": null
+                  }
+                ],
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "done",
+                "worst_signal": "Warning",
+                "h_codes": [
+                  "H319",
+                  "H315",
+                  "H335",
+                  "H336",
+                  "H227"
+                ],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "done",
+                "target_organs": [
+                  {
+                    "uid": "organ_respiratory_system",
+                    "name": "Respiratory system"
+                  },
+                  {
+                    "uid": "organ_eyes",
+                    "name": "Eyes"
+                  },
+                  {
+                    "uid": "organ_skin",
+                    "name": "Skin"
+                  },
+                  {
+                    "uid": "organ_central_nervous_system",
+                    "name": "Central nervous system"
+                  }
+                ],
+                "excretion_routes": [
+                  "Urine",
+                  "Milk"
+                ],
+                "exposure_effects": {
+                  "skin": {
+                    "name": "Redness",
+                    "relevant": true
+                  },
+                  "eyes": {
+                    "name": "Redness",
+                    "relevant": true
+                  },
+                  "inhalation": {
+                    "name": "Cough",
+                    "relevant": true
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": false
+                  }
+                },
+                "confidence": 1.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "done",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": true,
+                "limits_count": 1,
+                "strictest_limit": {
+                  "standard": "NIOSH",
+                  "type": "Ceiling",
+                  "value": "25",
+                  "unit": "ppm"
+                },
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "MODERATE",
+                "justification": [
+                  "Risk score: 3.2 - MODERATE"
+                ],
+                "risk_calculation_breakdown": {
+                  "hazard": {
+                    "raw_score": 3,
+                    "weight": 0.35,
+                    "contribution": 1.05,
+                    "justification": "Direct GHS pictogram: Irritant"
+                  },
+                  "organ": {
+                    "raw_score": 3,
+                    "weight": 0.35,
+                    "contribution": 1.05,
+                    "justification": "Organs affected: Respiratory system, Eyes, Skin, Central nervous system (average severity: 3.0)"
+                  },
+                  "class": {
+                    "raw_score": 4,
+                    "weight": 0.2,
+                    "contribution": 0.8,
+                    "justification": "Chemical class: Drug Clinical Phase (score: 4)"
+                  },
+                  "usage": {
+                    "raw_score": 3,
+                    "weight": 0.1,
+                    "contribution": 0.3,
+                    "justification": "Product usage: cosmetic (exposure relevance: 3)"
+                  }
+                }
+              },
+              "personalisation": null
+            },
+            {
+              "name": "POLYQUATERNIUM-10",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: POLYQUATERNIUM-10"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "POLYQUATERNIUM-10 not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "CI 14700",
+              "uid": "cosing_4548_53_2",
+              "cas": "4548-53-2",
+              "resolution": {
+                "fetch_status": "done",
+                "method": "synonym",
+                "confidence": 0.75,
+                "matched_name": "Disodium 3-[(2,4-dimethyl-5-sulphonatophenyl)azo]-4-hydroxynaphthalene-1-sulphonate (Ponceaux SX; CI 14700) when used as a substance in hair dye products",
+                "flag": null,
+                "error_message": null
+              },
+              "identity": {
+                "fetch_status": "done",
+                "preferred_name": "Disodium 3-[(2,4-dimethyl-5-sulphonatophenyl)azo]-4-hydroxynaphthalene-1-sulphonate (Ponceaux SX; CI 14700) when used as a substance in hair dye products",
+                "molecular_formula": "C18H14N2Na2O7S2",
+                "chemical_classes": [
+                  "Cosmetics",
+                  "CosIng"
+                ],
+                "use_categories": [
+                  {
+                    "industry_count": null,
+                    "name": null,
+                    "source": null,
+                    "consumer_count": null
+                  }
+                ],
+                "confidence": 0.75,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "done",
+                "worst_signal": "None",
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.75,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "done",
+                "target_organs": [
+                  {
+                    "uid": null,
+                    "name": null
+                  }
+                ],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": false
+                  }
+                },
+                "confidence": 0.75,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "done",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": true,
+                "limits_count": 1,
+                "strictest_limit": {
+                  "standard": null,
+                  "type": null,
+                  "value": null,
+                  "unit": null
+                },
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "SAFE",
+                "justification": [
+                  "Risk score: 0.7 - SAFE"
+                ],
+                "risk_calculation_breakdown": {
+                  "hazard": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No hazard data available"
+                  },
+                  "organ": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No valid target organs with names"
+                  },
+                  "class": {
+                    "raw_score": 2,
+                    "weight": 0.2,
+                    "contribution": 0.4,
+                    "justification": "Chemical class: Cosmetics (score: 2)"
+                  },
+                  "usage": {
+                    "raw_score": 3,
+                    "weight": 0.1,
+                    "contribution": 0.3,
+                    "justification": "Product usage: cosmetic (exposure relevance: 3)"
+                  }
+                }
+              },
+              "personalisation": null
+            },
+            {
+              "name": "RED 4",
+              "uid": "cosing_4548_53_2",
+              "cas": "4548-53-2",
+              "resolution": {
+                "fetch_status": "done",
+                "method": "synonym",
+                "confidence": 0.75,
+                "matched_name": "Disodium 3-[(2,4-dimethyl-5-sulphonatophenyl)azo]-4-hydroxynaphthalene-1-sulphonate (Ponceaux SX; CI 14700) when used as a substance in hair dye products",
+                "flag": null,
+                "error_message": null
+              },
+              "identity": {
+                "fetch_status": "done",
+                "preferred_name": "Disodium 3-[(2,4-dimethyl-5-sulphonatophenyl)azo]-4-hydroxynaphthalene-1-sulphonate (Ponceaux SX; CI 14700) when used as a substance in hair dye products",
+                "molecular_formula": "C18H14N2Na2O7S2",
+                "chemical_classes": [
+                  "Cosmetics",
+                  "CosIng"
+                ],
+                "use_categories": [
+                  {
+                    "industry_count": null,
+                    "name": null,
+                    "source": null,
+                    "consumer_count": null
+                  }
+                ],
+                "confidence": 0.75,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "done",
+                "worst_signal": "None",
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.75,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "done",
+                "target_organs": [
+                  {
+                    "uid": null,
+                    "name": null
+                  }
+                ],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": false
+                  }
+                },
+                "confidence": 0.75,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "done",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": true,
+                "limits_count": 1,
+                "strictest_limit": {
+                  "standard": null,
+                  "type": null,
+                  "value": null,
+                  "unit": null
+                },
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "SAFE",
+                "justification": [
+                  "Risk score: 0.7 - SAFE"
+                ],
+                "risk_calculation_breakdown": {
+                  "hazard": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No hazard data available"
+                  },
+                  "organ": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No valid target organs with names"
+                  },
+                  "class": {
+                    "raw_score": 2,
+                    "weight": 0.2,
+                    "contribution": 0.4,
+                    "justification": "Chemical class: Cosmetics (score: 2)"
+                  },
+                  "usage": {
+                    "raw_score": 3,
+                    "weight": 0.1,
+                    "contribution": 0.3,
+                    "justification": "Product usage: cosmetic (exposure relevance: 3)"
+                  }
+                }
+              },
+              "personalisation": null
+            },
+            {
+              "name": "CI 47005",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "done",
+                "method": "pubchem",
+                "confidence": 0.5,
+                "matched_name": "disodium;2-(1,3-dioxoinden-2-yl)quinoline-6,8-disulfonate",
+                "flag": null,
+                "error_message": null
+              },
+              "identity": {
+                "fetch_status": "done",
+                "preferred_name": "disodium;2-(1,3-dioxoinden-2-yl)quinoline-6,8-disulfonate",
+                "molecular_formula": "C18H9NNa2O8S2",
+                "chemical_classes": [
+                  "Cosmetics"
+                ],
+                "use_categories": [],
+                "confidence": 0.5,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "done",
+                "worst_signal": "",
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.5,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "done",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": false
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": false
+                  }
+                },
+                "confidence": 0.5,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "done",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": false,
+                "limits_count": 0,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "SAFE",
+                "justification": [
+                  "Risk score: 0.7 - SAFE"
+                ],
+                "risk_calculation_breakdown": {
+                  "hazard": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No hazard data available"
+                  },
+                  "organ": {
+                    "raw_score": 0,
+                    "weight": 0.35,
+                    "contribution": 0.0,
+                    "justification": "No target organs identified"
+                  },
+                  "class": {
+                    "raw_score": 2,
+                    "weight": 0.2,
+                    "contribution": 0.4,
+                    "justification": "Chemical class: Cosmetics (score: 2)"
+                  },
+                  "usage": {
+                    "raw_score": 3,
+                    "weight": 0.1,
+                    "contribution": 0.3,
+                    "justification": "Product usage: cosmetic (exposure relevance: 3)"
+                  }
+                }
+              },
+              "personalisation": null
+            },
+            {
+              "name": "ACID YELLOW 3",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: ACID YELLOW 3"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "ACID YELLOW 3 not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "PARFUM",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: PARFUM"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "PARFUM not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "FRAGRANCE",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: FRAGRANCE"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "FRAGRANCE not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "F.I.L",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: F.I.L"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "F.I.L not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "Z288697",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: Z288697"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "Z288697 not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            },
+            {
+              "name": "2",
+              "uid": null,
+              "cas": null,
+              "resolution": {
+                "fetch_status": "error",
+                "method": "unresolved",
+                "confidence": 0.0,
+                "matched_name": null,
+                "flag": "unverified_chemical",
+                "error_message": "Chemical not found in KG: 2"
+              },
+              "identity": {
+                "fetch_status": "not_called",
+                "preferred_name": null,
+                "molecular_formula": null,
+                "chemical_classes": [],
+                "use_categories": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "hazard": {
+                "fetch_status": "not_called",
+                "worst_signal": null,
+                "h_codes": [],
+                "categories": [],
+                "ghs_pictograms": [],
+                "toxicity_measures": [],
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "body_effects": {
+                "fetch_status": "not_called",
+                "target_organs": [],
+                "excretion_routes": [],
+                "exposure_effects": {
+                  "skin": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "eyes": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "inhalation": {
+                    "name": null,
+                    "relevant": null
+                  },
+                  "ingestion": {
+                    "name": null,
+                    "relevant": null
+                  }
+                },
+                "confidence": 0.0,
+                "error_message": null
+              },
+              "dose_evaluation": {
+                "fetch_status": "not_called",
+                "available": false,
+                "note": "No dose data provided - qualitative assessment only",
+                "exposure_limits_exist": null,
+                "limits_count": null,
+                "strictest_limit": null,
+                "error_message": null
+              },
+              "verdict": {
+                "danger_level": "UNKNOWN",
+                "justification": [
+                  "2 not found in Knowledge Graph or PubChem"
+                ],
+                "risk_calculation_breakdown": null
+              },
+              "personalisation": null
+            }
+          ],
+          "safe_skipped": [
+            {
+              "name": "AQUA",
+              "reason": "WATER"
+            },
+            {
+              "name": "WATER",
+              "reason": "WATER"
+            },
+            {
+              "name": "SODIUM CHLORIDE",
+              "reason": "SALT"
+            },
+            {
+              "name": "SIMMONDSIA CHINENSIS SEED OIL",
+              "reason": "NATURAL OIL/BUTTER"
+            },
+            {
+              "name": "JOJOBA SEED OIL",
+              "reason": "NATURAL OIL/BUTTER"
+            },
+            {
+              "name": "CITRIC ACID",
+              "reason": "CHEMICAL"
+            },
+            {
+              "name": "BUTYROSPERMUM PARKII BUTTER",
+              "reason": "NATURAL OIL/BUTTER"
+            },
+            {
+              "name": "SHEA BUTTER",
+              "reason": "NATURAL OIL/BUTTER"
+            },
+            {
+              "name": "PEG-7 GLYCERYL COCOATE",
+              "reason": "PEG COMPOUND"
+            }
+          ],
+          "unverified_chemicals": [
+            {
+              "name": "PEG-200 HYDROGENATED GLYCERYL PALMATE",
+              "reason": "PEG-200 HYDROGENATED GLYCERYL PALMATE not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "COCO-BETAINE",
+              "reason": "COCO-BETAINE not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "POLYSORBATE 20",
+              "reason": "POLYSORBATE 20 not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "POLYQUATERNIUM-10",
+              "reason": "POLYQUATERNIUM-10 not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "ACID YELLOW 3",
+              "reason": "ACID YELLOW 3 not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "PARFUM",
+              "reason": "PARFUM not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "FRAGRANCE",
+              "reason": "FRAGRANCE not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "F.I.L",
+              "reason": "F.I.L not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "Z288697",
+              "reason": "Z288697 not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            },
+            {
+              "name": "2",
+              "reason": "2 not found in Knowledge Graph or PubChem",
+              "flag": "unverified_chemical"
+            }
+          ]
+        },
+        "combination_risks": {
+          "organ_overlap": {
+            "fetch_status": "done",
+            "has_overlap": true,
+            "verdict_escalation": "MODERATE",
+            "overlapping_organs": [
+              {
+                "organ": "respiratory system",
+                "chemicals": [
+                  "SODIUM HYDROXIDE",
+                  "HEXYLENE GLYCOL"
+                ],
+                "count": 2
+              },
+              {
+                "organ": "eyes",
+                "chemicals": [
+                  "SODIUM HYDROXIDE",
+                  "HEXYLENE GLYCOL"
+                ],
+                "count": 2
+              },
+              {
+                "organ": "skin",
+                "chemicals": [
+                  "SODIUM HYDROXIDE",
+                  "HEXYLENE GLYCOL"
+                ],
+                "count": 2
+              },
+              {
+                "organ": "central nervous system",
+                "chemicals": [
+                  "HEXYLENE GLYCOL"
+                ],
+                "count": 1
+              }
+            ],
+            "note": "4 organ(s) targeted across products. Max 2 chemicals on a single organ.",
+            "error_message": null
+          },
+          "cumulative_presence": {
+            "fetch_status": "skipped",
+            "checked": false,
+            "note": "No cumulative concerns detected"
+          }
+        },
+        "summary": {
+          "total_ingredients": 26,
+          "chemicals_evaluated": 17,
+          "safe_skipped": 9,
+          "unverified": 10,
+          "critical": 0,
+          "high": 0,
+          "moderate": 2,
+          "low": 1,
+          "safe": 4,
+          "unknown": 10,
+          "organ_overlap_flags": 1
+        }
+      }
+    ],
+    "global_summary": {
+      "total_products": 1,
+      "products_to_avoid": 0,
+      "products_to_reduce": 1,
+      "products_safe": 0,
+      "products_unknown": 1,
+      "unique_chemicals_found": 17,
+      "critical_chemicals": [],
+      "high_chemicals": [],
+      "organs_under_pressure": [
+        "Eyes",
+        "Skin",
+        "Respiratory system",
+        "Central nervous system"
+      ],
+      "depth_used": "full",
+      "organ_global_analysis": {
+        "respiratory system": {
+          "unique_chemicals": [
+            "SODIUM HYDROXIDE",
+            "HEXYLENE GLYCOL"
+          ],
+          "total_unique_count": 2,
+          "chemical_frequency": {
+            "SODIUM HYDROXIDE": 1,
+            "HEXYLENE GLYCOL": 1
+          },
+          "products_per_chemical": {
+            "SODIUM HYDROXIDE": [
+              "django_scan"
+            ],
+            "HEXYLENE GLYCOL": [
+              "django_scan"
+            ]
+          }
+        },
+        "eyes": {
+          "unique_chemicals": [
+            "SODIUM HYDROXIDE",
+            "HEXYLENE GLYCOL"
+          ],
+          "total_unique_count": 2,
+          "chemical_frequency": {
+            "SODIUM HYDROXIDE": 1,
+            "HEXYLENE GLYCOL": 1
+          },
+          "products_per_chemical": {
+            "SODIUM HYDROXIDE": [
+              "django_scan"
+            ],
+            "HEXYLENE GLYCOL": [
+              "django_scan"
+            ]
+          }
+        },
+        "skin": {
+          "unique_chemicals": [
+            "SODIUM HYDROXIDE",
+            "HEXYLENE GLYCOL"
+          ],
+          "total_unique_count": 2,
+          "chemical_frequency": {
+            "SODIUM HYDROXIDE": 1,
+            "HEXYLENE GLYCOL": 1
+          },
+          "products_per_chemical": {
+            "SODIUM HYDROXIDE": [
+              "django_scan"
+            ],
+            "HEXYLENE GLYCOL": [
+              "django_scan"
+            ]
+          }
+        },
+        "central nervous system": {
+          "unique_chemicals": [
+            "HEXYLENE GLYCOL"
+          ],
+          "total_unique_count": 1,
+          "chemical_frequency": {
+            "HEXYLENE GLYCOL": 1
+          },
+          "products_per_chemical": {
+            "HEXYLENE GLYCOL": [
+              "django_scan"
+            ]
+          }
+        }
+      }
+    },
+    "product_verdicts": [
+      {
+        "product_id": "django_scan",
+        "product_name": "Product from Scan",
+        "risk_level": "MODERATE",
+        "recommendation": "reduce_use",
+        "recommendation_reason": "Based on 0 critical, 0 high risk chemicals",
+        "risk_drivers": []
+      }
+    ],
+    "chemicals_summary": [
+      {
+        "name": "SODIUM LAURETH SULFATE",
+        "risk_level": "SAFE",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": false,
+        "source": "PUBCHEM",
+        "personalisation": null
+      },
+      {
+        "name": "PEG-200 HYDROGENATED GLYCERYL PALMATE",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "COCO-BETAINE",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "SODIUM BENZOATE",
+        "risk_level": "LOW",
+        "confidence": 1.0,
+        "key_hazards": [
+          "H319"
+        ],
+        "target_organs": [
+          {
+            "uid": null,
+            "name": null
+          }
+        ],
+        "is_unresolved": false,
+        "source": "KG",
+        "personalisation": null
+      },
+      {
+        "name": "SODIUM HYDROXIDE",
+        "risk_level": "MODERATE",
+        "confidence": 1.0,
+        "key_hazards": [
+          "H319",
+          "H315",
+          "H335",
+          "H318",
+          "H370"
+        ],
+        "target_organs": [
+          {
+            "uid": "organ_respiratory_system",
+            "name": "Respiratory system"
+          },
+          {
+            "uid": "organ_eyes",
+            "name": "Eyes"
+          },
+          {
+            "uid": "organ_skin",
+            "name": "Skin"
+          }
+        ],
+        "is_unresolved": false,
+        "source": "KG",
+        "personalisation": null
+      },
+      {
+        "name": "POLYSORBATE 20",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "HEXYLENE GLYCOL",
+        "risk_level": "MODERATE",
+        "confidence": 1.0,
+        "key_hazards": [
+          "H319",
+          "H315",
+          "H335",
+          "H336",
+          "H227"
+        ],
+        "target_organs": [
+          {
+            "uid": "organ_respiratory_system",
+            "name": "Respiratory system"
+          },
+          {
+            "uid": "organ_eyes",
+            "name": "Eyes"
+          },
+          {
+            "uid": "organ_skin",
+            "name": "Skin"
+          },
+          {
+            "uid": "organ_central_nervous_system",
+            "name": "Central nervous system"
+          }
+        ],
+        "is_unresolved": false,
+        "source": "KG",
+        "personalisation": null
+      },
+      {
+        "name": "POLYQUATERNIUM-10",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "CI 14700",
+        "risk_level": "SAFE",
+        "confidence": 0.75,
+        "key_hazards": [],
+        "target_organs": [
+          {
+            "uid": null,
+            "name": null
+          }
+        ],
+        "is_unresolved": false,
+        "source": "KG",
+        "personalisation": null
+      },
+      {
+        "name": "RED 4",
+        "risk_level": "SAFE",
+        "confidence": 0.75,
+        "key_hazards": [],
+        "target_organs": [
+          {
+            "uid": null,
+            "name": null
+          }
+        ],
+        "is_unresolved": false,
+        "source": "KG",
+        "personalisation": null
+      },
+      {
+        "name": "CI 47005",
+        "risk_level": "SAFE",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": false,
+        "source": "PUBCHEM",
+        "personalisation": null
+      },
+      {
+        "name": "ACID YELLOW 3",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "PARFUM",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "FRAGRANCE",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "F.I.L",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "Z288697",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      },
+      {
+        "name": "2",
+        "risk_level": "UNKNOWN",
+        "confidence": 0.5,
+        "key_hazards": [],
+        "target_organs": [],
+        "is_unresolved": true,
+        "source": "UNKNOWN",
+        "personalisation": null
+      }
+    ],
+    "combination_risks": {
+      "organ_overlap_summary": "4 organ(s) targeted across products. Max 2 chemicals on a single organ.",
+      "cumulative_chemicals": [],
+      "verdict_escalation": "MODERATE"
+    },
+    "overall_assessment": "Analysis of 1 product(s) completed. 0 critical, 0 high risk chemicals.",
+    "safe_ingredients": [
+      "AQUA",
+      "WATER",
+      "SODIUM CHLORIDE",
+      "SIMMONDSIA CHINENSIS SEED OIL",
+      "JOJOBA SEED OIL",
+      "CITRIC ACID",
+      "BUTYROSPERMUM PARKII BUTTER",
+      "SHEA BUTTER",
+      "PEG-7 GLYCERYL COCOATE"
+    ],
+    "unverified_chemicals": [
+      "PEG-200 HYDROGENATED GLYCERYL PALMATE",
+      "COCO-BETAINE",
+      "POLYSORBATE 20",
+      "POLYQUATERNIUM-10",
+      "ACID YELLOW 3",
+      "PARFUM",
+      "FRAGRANCE",
+      "F.I.L",
+      "Z288697",
+      "2"
+    ],
+    "scoring_analysis": {
+      "product_risk_results": [
+        {
+          "product_id": "django_scan",
+          "product_name": "Product from Scan",
+          "ingredient_scores": [
+            {
+              "name": "SODIUM LAURETH SULFATE",
+              "danger_level": "SAFE",
+              "base_score": 1.0,
+              "weighted_score": 0.5,
+              "confidence": 0.5,
+              "justification": [
+                "Risk score: 0.9 - SAFE"
+              ]
+            },
+            {
+              "name": "PEG-200 HYDROGENATED GLYCERYL PALMATE",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "PEG-200 HYDROGENATED GLYCERYL PALMATE not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "COCO-BETAINE",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "COCO-BETAINE not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "SODIUM BENZOATE",
+              "danger_level": "LOW",
+              "base_score": 2.0,
+              "weighted_score": 2.0,
+              "confidence": 1.0,
+              "justification": [
+                "Risk score: 2.15 - LOW"
+              ]
+            },
+            {
+              "name": "SODIUM HYDROXIDE",
+              "danger_level": "MODERATE",
+              "base_score": 3.5,
+              "weighted_score": 3.5,
+              "confidence": 1.0,
+              "justification": [
+                "Risk score: 3.55 - MODERATE"
+              ]
+            },
+            {
+              "name": "POLYSORBATE 20",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "POLYSORBATE 20 not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "HEXYLENE GLYCOL",
+              "danger_level": "MODERATE",
+              "base_score": 3.5,
+              "weighted_score": 3.5,
+              "confidence": 1.0,
+              "justification": [
+                "Risk score: 3.2 - MODERATE"
+              ]
+            },
+            {
+              "name": "POLYQUATERNIUM-10",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "POLYQUATERNIUM-10 not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "CI 14700",
+              "danger_level": "SAFE",
+              "base_score": 1.0,
+              "weighted_score": 0.75,
+              "confidence": 0.75,
+              "justification": [
+                "Risk score: 0.7 - SAFE"
+              ]
+            },
+            {
+              "name": "RED 4",
+              "danger_level": "SAFE",
+              "base_score": 1.0,
+              "weighted_score": 0.75,
+              "confidence": 0.75,
+              "justification": [
+                "Risk score: 0.7 - SAFE"
+              ]
+            },
+            {
+              "name": "CI 47005",
+              "danger_level": "SAFE",
+              "base_score": 1.0,
+              "weighted_score": 0.5,
+              "confidence": 0.5,
+              "justification": [
+                "Risk score: 0.7 - SAFE"
+              ]
+            },
+            {
+              "name": "ACID YELLOW 3",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "ACID YELLOW 3 not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "PARFUM",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "PARFUM not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "FRAGRANCE",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "FRAGRANCE not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "F.I.L",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "F.I.L not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "Z288697",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "Z288697 not found in Knowledge Graph or PubChem"
+              ]
+            },
+            {
+              "name": "2",
+              "danger_level": "UNKNOWN",
+              "base_score": 0.5,
+              "weighted_score": 0.0,
+              "confidence": 0.0,
+              "justification": [
+                "2 not found in Knowledge Graph or PubChem"
+              ]
+            }
+          ],
+          "ingredient_risk_sum": 11.5,
+          "top_ingredient_score": 3.5,
+          "organ_overlap_results": [
+            {
+              "organ": "respiratory system",
+              "organ_id": "lungs_respiratory",
+              "organ_name_full": "Lungs / Respiratory System",
+              "priority_weight": 10.0,
+              "priority_tier": 1,
+              "cumulation_multiplier": 1.6,
+              "vitality": "immediately_life_critical",
+              "reversibility": "partially_reversible",
+              "chemicals": [
+                "SODIUM HYDROXIDE",
+                "HEXYLENE GLYCOL"
+              ],
+              "chemical_count": 2,
+              "synergy_factor": 1.2,
+              "chem_score_sum": 7.0,
+              "overlap_score": 134.4,
+              "risk_level": "CRITICAL"
+            },
+            {
+              "organ": "eyes",
+              "organ_id": "eyes",
+              "organ_name_full": "Eyes / Ocular System",
+              "priority_weight": 3.0,
+              "priority_tier": 4,
+              "cumulation_multiplier": 1.2,
+              "vitality": "not_immediately_life_critical",
+              "reversibility": "mostly_irreversible",
+              "chemicals": [
+                "SODIUM HYDROXIDE",
+                "HEXYLENE GLYCOL"
+              ],
+              "chemical_count": 2,
+              "synergy_factor": 1.2,
+              "chem_score_sum": 7.0,
+              "overlap_score": 30.24,
+              "risk_level": "CRITICAL"
+            },
+            {
+              "organ": "skin",
+              "organ_id": "skin",
+              "organ_name_full": "Skin / Integumentary System",
+              "priority_weight": 3.0,
+              "priority_tier": 4,
+              "cumulation_multiplier": 1.1,
+              "vitality": "not_immediately_life_critical",
+              "reversibility": "mostly_reversible",
+              "chemicals": [
+                "SODIUM HYDROXIDE",
+                "HEXYLENE GLYCOL"
+              ],
+              "chemical_count": 2,
+              "synergy_factor": 1.2,
+              "chem_score_sum": 7.0,
+              "overlap_score": 27.72,
+              "risk_level": "CRITICAL"
+            }
+          ],
+          "overlap_risk_total": 192.36,
+          "max_overlap_score": 134.4,
+          "total_product_score": 107.68,
+          "verdict": "CRITICAL",
+          "summary": {
+            "total_ingredients": 26,
+            "chemicals_evaluated": 17,
+            "safe_skipped": 9,
+            "unverified": 10,
+            "critical": 0,
+            "high": 0,
+            "moderate": 2,
+            "low": 1,
+            "safe": 4,
+            "unknown": 10,
+            "organ_overlap_flags": 1
+          },
+          "drivers": []
+        }
+      ],
+      "ranked_products": [
+        {
+          "rank": 1,
+          "product_id": "django_scan",
+          "product_name": "Product from Scan",
+          "total_product_score": 107.68,
+          "verdict": "CRITICAL"
+        }
+      ],
+      "highest_risk_product": {
+        "product_id": "django_scan",
+        "product_name": "Product from Scan",
+        "score": 107.68,
+        "verdict": "CRITICAL"
+      },
+      "recurrence_risks": [],
+      "global_organs_at_risk": [
+        "Eyes",
+        "Skin",
+        "Respiratory system",
+        "Central nervous system"
+      ],
+      "global_high_chemicals": [],
+      "user_type_applied": null,
+      "llm_report": "**Chemical Risk Analysis Report**\n\n**1. Executive Summary**\n\nThis report presents the findings of a comprehensive chemical risk analysis for the product \"Product from Scan\" (product_id: django_scan). The analysis was conducted based on the provided data, which includes the product's total score, ingredient risk sum, overlap risk total, and ranking information. The results indicate that the product has a critical risk level, with a total product score of 107.68 and an ingredient risk sum of 11.5. The overlap risk total is 192.36, which suggests a potential cumulative organ overlap risk.\n\n**2. Individual Ingredient Risk**\n\nThe ingredient risk sum for the product \"Product from Scan\" is 11.5. This value represents the total risk associated with the individual ingredients present in the product. While the exact identity of the ingredients is not specified in the provided data, the ingredient risk sum provides a quantitative measure of the potential risks associated with each ingredient.\n\n**3. Cross-Product Recurrence Risk**\n\nThe overlap risk total for the product \"Product from Scan\" is 192.36. This value represents the potential cumulative organ overlap risk associated with the product's ingredients. The overlap risk total is calculated based on the recurrence risks of individual ingredients, which are not specified in the provided data. However, the high overlap risk total suggests that the product's ingredients may have a high potential for cumulative organ overlap risk.\n\n**4. Cumulative Organ Overlap Risk**\n\nThe cumulative organ overlap risk for the product \"Product from Scan\" is not explicitly stated in the provided data. However, based on the overlap risk total of 192.36, it is likely that the product's ingredients have a high potential for cumulative organ overlap risk. This risk is associated with the repeated exposure to similar chemicals, which can lead to additive or synergistic effects on human health.\n\n**5. Product Risk Ranking**\n\nThe product \"Product from Scan\" has been ranked as the highest-risk product, with a total product score of 107.68 and a critical risk level. This ranking is based on the product's total score, which is calculated based on various risk factors, including ingredient risk, overlap risk, and other relevant metrics.\n\n**6. Recommendations**\n\nBased on the findings of this chemical risk analysis, the following recommendations are made:\n\n* Conduct a thorough review of the product's ingredients to identify potential sources of risk.\n* Develop a plan to mitigate or eliminate the risks associated with the product's ingredients.\n* Consider reformulating the product to reduce its risk profile.\n* Provide clear and transparent labeling of the product's ingredients and potential risks to consumers.\n\n**Conclusion**\n\nThe chemical risk analysis of the product \"Product from Scan\" has identified significant risks associated with its ingredients and cumulative organ overlap risk. To ensure the safety of consumers, it is essential to address these risks through a comprehensive risk mitigation plan."
+    }
+  }
+}

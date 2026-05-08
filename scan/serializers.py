@@ -1,12 +1,11 @@
 from rest_framework import serializers
-
 from .models import Scan
 
 
 class ScanSerializer(serializers.ModelSerializer):
     class Meta:
         model = Scan
-        fields = ["id", "user", "image", "created_at"]
+        fields = ["id", "user", "product", "image", "created_at"]
         read_only_fields = ["id", "created_at"]
 
 
@@ -23,10 +22,15 @@ class ScanPipelineAnalysisSerializer(serializers.Serializer):
 
 class ScanPipelineResponseSerializer(serializers.Serializer):
     scan_id = serializers.IntegerField()
+    product_id = serializers.IntegerField(required=False, allow_null=True)
     ingredients = serializers.ListField(child=serializers.CharField())
     risks = serializers.ListField(child=serializers.DictField())
     recommendations = serializers.ListField(child=serializers.DictField())
     analysis = ScanPipelineAnalysisSerializer(required=False)
+    user_decision = serializers.CharField(required=False, allow_null=True)
+    cumulative_report = serializers.DictField(required=False, allow_null=True)
+    agent_debug_log = serializers.ListField(child=serializers.CharField(), required=False, allow_null=True)
+    saved_report_path = serializers.CharField(required=False, allow_null=True)
 
 
 class SegmentationRequestSerializer(serializers.Serializer):

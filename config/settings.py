@@ -1,4 +1,9 @@
 from pathlib import Path
+import asyncio
+import warnings
+
+# Suppress the asyncio pipe warnings on Windows
+warnings.filterwarnings("ignore", category=ResourceWarning)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 

@@ -1,6 +1,4 @@
 """
-servers/filter_server/classifier.py
-──────────────────────────────────────
 Ingredient classifier - uses config.groq.GroqClient
 All caching, timeout, retry, and fallback are handled in config.groq
 """
@@ -17,10 +15,16 @@ from config.groq import get_groq_client
 def classify_with_groq(ingredients: list, usage: str = "cosmetic") -> dict:
     """
     Classify ingredients using the global Groq client.
-    All complexity (caching, timeout, retry, fallback) is handled in config.groq.
+    
+    Returns:
+        {
+            "chemicals": [{"name": str, "reason": str, "unverified": bool}, ...],
+            "safe_skipped": [{"name": str, "reason": str}, ...],
+            "garbage": [{"name": str, "reason": str}, ...]
+        }
     """
     if not ingredients:
-        return {"chemicals": [], "safe_skipped": [], "unclassified": []}
+        return {"chemicals": [], "safe_skipped": [], "garbage": []}
     
     client = get_groq_client()
     return client.classify_ingredients(ingredients, usage)
@@ -35,15 +39,18 @@ if __name__ == "__main__":
     test_ingredients = [
         {"name": "AQUA"},
         {"name": "WATER"},
-        {"name": "GLYCERIN"},
+        {"name": "CITRIC ACID"},
         {"name": "SODIUM LAURETH SULFATE"},
         {"name": "COCO-BETAINE"},
+        {"name": "POLYSORBATE 20"},
+        {"name": "PEG-200 HYDROGENATED GLYCERYL PALMATE"},
         {"name": "PARFUM"},
-        {"name": "PHENOXYETHANOL"},
+        {"name": "2"},
+        {"name": "Z288697"},
+        {"name": "F.I.L"},
+        {"name": "SHEA BUTTER"},
+        {"name": "METHYLPARABEN"},
         {"name": "LIMONENE"},
-        {"name": "DIMETHICONE"},
-        {"name": "CERAMIDE NP"},
-        {"name": "XANTHAN GUM"},
     ]
     
     print(f"\n📋 Testing {len(test_ingredients)} ingredients...")
@@ -59,6 +66,10 @@ if __name__ == "__main__":
     print(f"\n  ✅ SAFE SKIPPED ({len(result.get('safe_skipped', []))}):")
     for s in result.get("safe_skipped", []):
         print(f"    - {s['name']}: {s['reason']}")
+    
+    print(f"\n  🗑️ GARBAGE ({len(result.get('garbage', []))}):")
+    for g in result.get("garbage", []):
+        print(f"    - {g['name']}: {g['reason']}")
     
     print("\n" + "=" * 60)
     print("✅ Filter server ready")

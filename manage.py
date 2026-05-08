@@ -2,7 +2,8 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+import asyncio
+asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
 def main():
     """Run administrative tasks."""

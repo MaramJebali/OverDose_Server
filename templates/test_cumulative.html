@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cumulative Risk Test</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: system-ui, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .card { background: white; border-radius: 16px; padding: 20px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .flex-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 12px; }
+        label { font-weight: 500; font-size: 0.85rem; display: block; margin-bottom: 6px; }
+        input, select, button { padding: 8px 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 0.9rem; }
+        button { background: #0f766e; color: white; border: none; cursor: pointer; }
+        button.secondary { background: #4b5563; }
+        .log { background: #1e1e2f; color: #e2e8f0; padding: 16px; border-radius: 12px; overflow-x: auto; font-size: 0.8rem; font-family: monospace; }
+        .product-item { border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; margin-bottom: 12px; background: #fafafa; }
+        .product-buttons { display: flex; gap: 8px; margin-top: 10px; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; }
+        .badge.approved { background: #dcfce7; color: #15803d; }
+        .badge.rejected { background: #fee2e2; color: #b91c1c; }
+        .badge.saved { background: #e0e7ff; color: #4338ca; }
+        .badge.pending { background: #fef3c7; color: #b45309; }
+        pre { margin: 0; white-space: pre-wrap; }
+        .debug-log { display: none; margin-top: 12px; }
+        .debug-log.show { display: block; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧪 Cumulative Risk Test</h1>
+
+    <div class="card">
+        <h2>🔐 Login / Register</h2>
+        <div class="flex-row">
+            <div style="flex:1"><label>Email</label><input type="email" id="login-email" placeholder="user@example.com" value="alice@example.com"></div>
+            <div style="flex:1"><label>Password</label><input type="password" id="login-password" placeholder="password" value="alice123"></div>
+            <div><button id="btn-login">Login</button></div>
+            <div><button id="btn-register" class="secondary">Register</button></div>
+            <div><button id="btn-logout" class="secondary" style="background:#b91c1c">Logout</button></div>
+        </div>
+        <div id="auth-status" class="log">Not logged in</div>
+    </div>
+
+    <div class="card" id="scan-card" style="display:none">
+        <h2>📸 Scan Product</h2>
+        <div class="flex-row">
+            <div style="flex:1"><label>Image</label><input type="file" id="scan-image" accept="image/*"></div>
+            <div><button id="btn-scan">Upload & Scan</button></div>
+            <div><button id="btn-show-debug" class="secondary">Show Agent Log</button></div>
+        </div>
+        <div id="debug-panel" class="debug-log">
+            <pre id="debug-content" class="log"></pre>
+        </div>
+        <div id="scan-result" class="log">No scan yet</div>
+    </div>
+
+    <div class="card" id="products-card" style="display:none">
+        <h2>📦 My Products</h2>
+        <div class="flex-row">
+            <button id="filter-active" class="secondary">Active</button>
+            <button id="filter-pending">Pending</button>
+            <button id="filter-rejected">Rejected</button>
+            <button id="filter-all">All</button>
+            <button id="refresh-products">Refresh</button>
+        </div>
+        <div id="products-list">Loading...</div>
+    </div>
+
+    <div class="card" id="cumulative-card" style="display:none">
+        <h2>📊 Cumulative Report (global summary)</h2>
+        <div id="cumulative-summary" class="log"></div>
+        <details><summary>Full JSON</summary><pre id="cumulative-full" class="log"></pre></details>
+    </div>
+
+    <div class="card"><h2>📜 API Log</h2><pre id="api-log" class="log">Ready.</pre></div>
+</div>
+
+<script>
+var token = localStorage.getItem('token');
+var currentUser = null;
+
+function log(msg, isErr) {
+    var logDiv = document.getElementById('api-log');
+    var time = new Date().toLocaleTimeString();
+    var colorStyle = isErr ? 'color:#f87171' : '';
+    logDiv.innerHTML += '<div style="' + colorStyle + '">[' + time + '] ' + msg + '</div>';
+    logDiv.scrollTop = logDiv.scrollHeight;
+}
+
+function getCookie(name) {
+    var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+    return v ? v[2] : null;
+}
+
+async function apiCall(url, method, body, useToken) {
+    var headers = { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') };
+    if (useToken !== false && token) headers['Authorization'] = 'Token ' + token;
+    var options = { method: method, headers: headers };
+    if (body && !(body instanceof FormData)) options.body = JSON.stringify(body);
+    if (body instanceof FormData) {
+        delete headers['Content-Type'];
+        options.body = body;
+    }
+    var response = await fetch(url, options);
+    var data = await response.json().catch(function() { return { error: 'Invalid JSON' }; });
+    log(method + ' ' + url + ' -> ' + response.status);
+    if (!response.ok) log('Error: ' + JSON.stringify(data), true);
+    return { ok: response.ok, status: response.status, data: data };
+}
+
+async function updateUI() {
+    var authDiv = document.getElementById('auth-status');
+    var scanCard = document.getElementById('scan-card');
+    var productsCard = document.getElementById('products-card');
+    var cumulativeCard = document.getElementById('cumulative-card');
+    if (token && currentUser) {
+        authDiv.innerHTML = '<span style="color:#10b981">✅ Logged in as ' + currentUser.email + '</span>';
+        scanCard.style.display = 'block';
+        productsCard.style.display = 'block';
+        cumulativeCard.style.display = 'block';
+        await loadUserProducts();
+        await loadCumulative();
+    } else {
+        authDiv.innerHTML = '<span style="color:#f87171">❌ Not logged in</span>';
+        scanCard.style.display = 'none';
+        productsCard.style.display = 'none';
+        cumulativeCard.style.display = 'none';
+    }
+}
+
+async function loadCumulative() {
+    var res = await apiCall('/api/users/me/', 'GET');
+    if (res.ok && res.data.ai_report) {
+        var r = res.data.ai_report;
+        var g = r.global_summary || {};
+        var html = '<strong>Organs under pressure:</strong> ' + (g.organs_under_pressure || []).join(', ') || 'None';
+        html += '<br><strong>Critical chemicals:</strong> ' + (g.critical_chemicals || []).join(', ') || 'None';
+        html += '<br><strong>Products to avoid:</strong> ' + (g.products_to_avoid || 0);
+        html += '<br><strong>Products to reduce:</strong> ' + (g.products_to_reduce || 0);
+        document.getElementById('cumulative-summary').innerHTML = html;
+        document.getElementById('cumulative-full').textContent = JSON.stringify(r, null, 2);
+    } else {
+        document.getElementById('cumulative-summary').innerHTML = 'No cumulative report yet (need at least 2 approved products).';
+        document.getElementById('cumulative-full').textContent = '{}';
+    }
+}
+
+async function loadUserProducts(status) {
+    if (status === undefined) status = 'active';
+    var url = '/api/products/my-products/';
+    if (status !== 'active') url = url + '?status=' + status;
+    var res = await apiCall(url, 'GET');
+    if (!res.ok) return;
+    var products = res.data.products || [];
+    var counts = res.data.counts || {};
+    var html = '<div>Counts: ✅' + (counts.approved||0) + ' 💾' + (counts.saved||0) + ' ⏳' + (counts.pending||0) + ' ❌' + (counts.rejected||0) + '</div>';
+    for (var i = 0; i < products.length; i++) {
+        var p = products[i];
+        var dec = p.user_decision || 'pending';
+        html += '<div class="product-item">';
+        html += '<strong>' + p.name + '</strong> (' + (p.brand || '?') + ') <span class="badge ' + dec + '">' + dec + '</span>';
+        html += '<div class="product-buttons">';
+        html += '<button class="approve" data-id="' + p.id + '">✅ Approve</button>';
+        html += '<button class="reject" data-id="' + p.id + '">❌ Reject</button>';
+        html += '<button class="save" data-id="' + p.id + '">💾 Save</button>';
+        html += '</div></div>';
+    }
+    document.getElementById('products-list').innerHTML = html || '<div>No products</div>';
+    var approves = document.querySelectorAll('.approve');
+    for (var j = 0; j < approves.length; j++) {
+        approves[j].onclick = (function(id) { return function() { updateDecision(id, 'approved'); }; })(approves[j].getAttribute('data-id'));
+    }
+    var rejects = document.querySelectorAll('.reject');
+    for (var k = 0; k < rejects.length; k++) {
+        rejects[k].onclick = (function(id) { return function() { updateDecision(id, 'rejected'); }; })(rejects[k].getAttribute('data-id'));
+    }
+    var saves = document.querySelectorAll('.save');
+    for (var l = 0; l < saves.length; l++) {
+        saves[l].onclick = (function(id) { return function() { updateDecision(id, 'saved'); }; })(saves[l].getAttribute('data-id'));
+    }
+}
+
+async function updateDecision(pid, decision) {
+    var res = await apiCall('/api/products/' + pid + '/decision/', 'PATCH', { decision: decision, notes: 'Test' });
+    if (res.ok) {
+        await loadUserProducts();
+        await loadCumulative();
+    }
+}
+
+async function scan(file) {
+    var fd = new FormData();
+    fd.append('image', file);
+    var res = await apiCall('/api/scan/', 'POST', fd, true);
+    if (res.ok) {
+        document.getElementById('scan-result').innerHTML = JSON.stringify(res.data, null, 2);
+        if (res.data.agent_debug_log) {
+            document.getElementById('debug-content').textContent = res.data.agent_debug_log.join('\n');
+        } else {
+            document.getElementById('debug-content').textContent = 'No agent debug log available.';
+        }
+        await loadUserProducts();
+        await loadCumulative();
+    } else {
+        document.getElementById('scan-result').innerHTML = 'Error: ' + JSON.stringify(res.data);
+    }
+}
+
+document.getElementById('btn-login').onclick = async function() {
+    var email = document.getElementById('login-email').value;
+    var pwd = document.getElementById('login-password').value;
+    var res = await apiCall('/api/users/auth/login/', 'POST', { email: email, password: pwd }, false);
+    if (res.ok) {
+        token = res.data.token;
+        currentUser = res.data.user;
+        localStorage.setItem('token', token);
+        await updateUI();
+    } else alert('Login failed: ' + JSON.stringify(res.data));
+};
+document.getElementById('btn-register').onclick = async function() {
+    var email = document.getElementById('login-email').value;
+    var pwd = document.getElementById('login-password').value;
+    var payload = { first_name: email.split('@')[0], last_name: 'Test', email: email, password: pwd, user_type: 'diabetes' };
+    var res = await apiCall('/api/users/auth/register/', 'POST', payload, false);
+    if (res.ok) {
+        token = res.data.token;
+        currentUser = res.data.user;
+        localStorage.setItem('token', token);
+        await updateUI();
+    } else alert('Registration failed: ' + JSON.stringify(res.data));
+};
+document.getElementById('btn-logout').onclick = function() {
+    token = null;
+    currentUser = null;
+    localStorage.removeItem('token');
+    updateUI();
+};
+document.getElementById('btn-scan').onclick = function() {
+    var file = document.getElementById('scan-image').files[0];
+    if (file) scan(file);
+    else alert('Select an image');
+};
+document.getElementById('btn-show-debug').onclick = function() {
+    var panel = document.getElementById('debug-panel');
+    if (panel.classList) panel.classList.toggle('show');
+    else panel.className = (panel.className === 'debug-log' ? 'debug-log show' : 'debug-log');
+};
+document.getElementById('filter-active').onclick = function() { loadUserProducts('active'); };
+document.getElementById('filter-pending').onclick = function() { loadUserProducts('pending'); };
+document.getElementById('filter-rejected').onclick = function() { loadUserProducts('rejected'); };
+document.getElementById('filter-all').onclick = function() { loadUserProducts('all'); };
+document.getElementById('refresh-products').onclick = function() { loadUserProducts(); };
+
+if (token) {
+    apiCall('/api/users/me/', 'GET').then(function(res) {
+        if (res.ok) {
+            currentUser = res.data;
+            updateUI();
+        } else {
+            token = null;
+            localStorage.removeItem('token');
+            updateUI();
+        }
+    });
+} else {
+    updateUI();
+}
+</script>
+</body>
+</html>

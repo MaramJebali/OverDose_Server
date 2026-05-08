@@ -20,6 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
+from users.views import test_cumulative
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,6 +30,7 @@ urlpatterns = [
     path("api/scan/", include("scan.urls")),
     path("api/risk/", include("risk.urls")),
     path("api/recommend/", include("recommendation.urls")),
+    path('test-cumulative/', test_cumulative, name='test_cumulative'),
 ]
 
 if settings.DEBUG:

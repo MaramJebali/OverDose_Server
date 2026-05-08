@@ -11,13 +11,16 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "age",
+            "user_type",
             "gender",
             "date_of_birth",
             "notes",
+            "ai_report",
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["id", "created_at", "updated_at"]
+        read_only_fields = ["id", "created_at", "updated_at", "ai_report"]
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -30,6 +33,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "age",
+            "user_type",
             "gender",
             "date_of_birth",
             "notes",
@@ -60,3 +65,13 @@ class UserAllergySerializer(serializers.ModelSerializer):
 
 class CurrentUserAllergyUpdateSerializer(serializers.Serializer):
     allergy_ids = serializers.ListField(child=serializers.IntegerField(min_value=1), allow_empty=True)
+
+
+class UserAIReportUpdateSerializer(serializers.Serializer):
+    """Serializer for updating AI report"""
+    report_data = serializers.JSONField(required=True)
+
+
+class UserTypeUpdateSerializer(serializers.Serializer):
+    """Serializer for updating user type"""
+    user_type = serializers.ChoiceField(choices=User.USER_TYPE_CHOICES, required=True)
